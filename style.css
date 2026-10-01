@@ -2489,3 +2489,6 @@ textarea.form-control {
   border-color: #ff6b6b !important;
 }
 
+
+/* dynamic settings: admin image na ho to element chhupa rahe */
+.hidden-until-set{display:none!important}
