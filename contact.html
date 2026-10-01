@@ -14,15 +14,15 @@
 <body>
 
   <!-- Top Announcement Bar -->
-  <div class="announcement-bar">
+  <div class="announcement-bar" id="announcementBar">
     <div class="container announcement-content">
       <div class="announcement-item">
         <i class="fa-solid fa-location-dot"></i>
-        <span>Showroom: Taranagar Road, 1 KM from Sardarshahar Circle, Sardarshahar, Rajasthan</span>
+        <span data-stext="announcement">Showroom: Taranagar Road, 1 KM from Sardarshahar Circle, Sardarshahar, Rajasthan</span>
       </div>
       <div class="announcement-item">
         <i class="fa-solid fa-phone"></i>
-        <span>Helpline: <a href="tel:9783656009" class="announcement-link">9783656009</a></span>
+        <span>Helpline: <a href="tel:9783656009" data-stel="phone" class="announcement-link"><span data-stext="phone">9783656009</span></a></span>
         <span style="margin: 0 8px; color: var(--gold-500);">|</span>
         <i class="fa-brands fa-whatsapp" style="color: #25d366;"></i>
         <a href="https://wa.me/919783656009" target="_blank" class="announcement-link">WhatsApp Us</a>
@@ -39,7 +39,7 @@
         </div>
         <div class="brand-text-wrap">
           <span class="brand-title">DEVWOOD <span>DEKOR</span></span>
-          <span class="brand-tagline">ROYAL WOODCRAFT & ANTIQUES</span>
+          <span class="brand-tagline" data-stext="tagline">ROYAL WOODCRAFT & ANTIQUES</span>
         </div>
       </a>
 
@@ -61,9 +61,9 @@
           <i class="fa-solid fa-gauge"></i> <span>Admin Panel</span>
         </a>
 
-        <a href="https://wa.me/919783656009" target="_blank" class="whatsapp-direct-btn">
+        <a href="https://wa.me/919783656009" target="_blank" class="whatsapp-direct-btn" data-swa>
           <i class="fa-brands fa-whatsapp"></i>
-          <span>Chat 9783656009</span>
+          <span>Chat <span data-stext="phone">9783656009</span></span>
         </a>
 
         <button class="action-btn" onclick="openCartDrawer()" title="View Cart">
@@ -102,7 +102,7 @@
         </button>
       </li>
       <li style="margin-top: 20px;">
-        <a href="tel:9783656009" style="color: var(--gold-400);"><i class="fa-solid fa-phone"></i> Call: 9783656009</a>
+        <a href="tel:9783656009" data-stel="phone" style="color: var(--gold-400);"><i class="fa-solid fa-phone"></i> Call: <span data-stext="phone">9783656009</span></a>
       </li>
     </ul>
   </div>
@@ -162,8 +162,8 @@
             <div class="contact-card-content">
               <h4>Phone & WhatsApp Helpline</h4>
               <p>
-                Direct Call: <a href="tel:9783656009" style="color: var(--wood-900); font-weight: 700;">+91 9783656009</a><br>
-                WhatsApp Chat: <a href="https://wa.me/919783656009" target="_blank" style="color: #25d366; font-weight: 700;">Click here to message 9783656009</a>
+                Direct Call: <a href="tel:9783656009" data-stel="phone" style="color: var(--wood-900); font-weight: 700;"><span data-stext="phone">+91 9783656009</span></a><br>
+                WhatsApp Chat: <a href="https://wa.me/919783656009" data-swa target="_blank" style="color: #25d366; font-weight: 700;">Click here to message <span data-stext="phone">9783656009</span></a>
               </p>
               <div style="margin-top: 6px; font-size: 0.85rem; color: var(--muted-text);">
                 Instant assistance for catalogue requests, price quotations, and photos.
@@ -327,11 +327,11 @@
           <div class="footer-contact-list">
             <div class="footer-contact-item">
               <i class="fa-solid fa-location-dot"></i>
-              <span>Taranagar Road, 1 KM from Sardarshahar Circle, Sardarshahar, Rajasthan</span>
+              <span data-stext="address">Taranagar Road, 1 KM from Sardarshahar Circle, Sardarshahar, Rajasthan</span>
             </div>
             <div class="footer-contact-item">
               <i class="fa-solid fa-phone"></i>
-              <span><a href="tel:9783656009" style="color: var(--gold-400); font-weight: 700;">+91 9783656009</a></span>
+              <span><a href="tel:9783656009" data-stel="phone" style="color: var(--gold-400); font-weight: 700;"><span data-stext="phone">+91 9783656009</span></a></span>
             </div>
             <div class="footer-contact-item">
               <i class="fa-brands fa-whatsapp"></i>
@@ -415,6 +415,9 @@
     <i class="fa-brands fa-whatsapp"></i>
   </a>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/db.js"></script>
   <script src="main.js"></script>
 </body>
 </html>

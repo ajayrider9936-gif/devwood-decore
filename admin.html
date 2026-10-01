@@ -1,749 +1,817 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="hi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Panel | Devwood Dekor</title>
-  <meta name="description" content="Devwood Dekor Admin Panel - Manage products, orders, and settings">
-  <link rel="icon"
-    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪑</text></svg>">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="style.css">
-</head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel — Devwood Dekor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/db.js"></script>
+<style>
+  :root{
+    --wood-900:#1a100b; --wood-800:#2b1a0e; --wood-700:#3d2617;
+    --gold-500:#c59b27; --gold-600:#a8821f; --gold-100:#f7ecd2;
+    --cream:#faf6ef; --card:#ffffff; --muted:#8a7a68; --border:#e8ddc9;
+    --green:#1e8e4d; --red:#d23c2e; --blue:#2563eb;
+    --shadow:0 10px 30px rgba(26,16,11,.10);
+    --radius:14px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Inter',sans-serif; background:var(--cream); color:var(--wood-900); min-height:100vh;}
+  h1,h2,h3,.serif{font-family:'Playfair Display',serif;}
+  button{font-family:inherit; cursor:pointer;}
+  input,select,textarea{font-family:inherit; font-size:.92rem; padding:11px 13px; border:1.5px solid var(--border); border-radius:10px; width:100%; background:#fff; color:var(--wood-900);}
+  input:focus,select:focus,textarea:focus{outline:none; border-color:var(--gold-500); box-shadow:0 0 0 3px rgba(197,155,39,.15);}
+  textarea{min-height:90px; resize:vertical;}
+  label.lbl{display:block; font-size:.8rem; font-weight:600; color:var(--wood-700); margin:0 0 6px 2px;}
+  .hidden{display:none !important;}
 
+  /* ---------- LOGIN ---------- */
+  #loginView{min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px;
+    background:radial-gradient(1200px 600px at 20% 0%, #3d2617 0%, var(--wood-900) 55%, #0d0704 100%);}
+  .login-card{background:#fff; border-radius:20px; padding:40px 36px; width:100%; max-width:400px; box-shadow:var(--shadow); text-align:center;}
+  .login-card .brand{font-family:'Playfair Display',serif; font-size:1.7rem; color:var(--wood-900); margin-bottom:4px;}
+  .login-card .brand span{color:var(--gold-600);}
+  .login-card p.sub{color:var(--muted); font-size:.88rem; margin-bottom:26px;}
+  .login-card .field{margin-bottom:14px; text-align:left;}
+  .login-err{background:#fdecea; color:var(--red); border:1px solid #f5c6c0; padding:10px 12px; border-radius:10px; font-size:.85rem; margin-bottom:14px; display:none;}
+
+  /* ---------- APP LAYOUT ---------- */
+  #appView{display:flex; min-height:100vh;}
+  .sidebar{width:248px; background:var(--wood-900); color:#f3e9d6; display:flex; flex-direction:column; position:sticky; top:0; height:100vh; flex-shrink:0;}
+  .sidebar .s-brand{padding:22px 20px; border-bottom:1px solid rgba(197,155,39,.25);}
+  .sidebar .s-brand h2{font-size:1.25rem; color:#fff;}
+  .sidebar .s-brand h2 span{color:var(--gold-500);}
+  .sidebar .s-brand small{color:var(--muted); font-size:.72rem; letter-spacing:1px; text-transform:uppercase;}
+  .s-nav{padding:14px 12px; display:flex; flex-direction:column; gap:4px; flex:1;}
+  .s-nav button{display:flex; align-items:center; gap:12px; padding:12px 14px; border:none; background:transparent; color:#d8c9ae; border-radius:10px; font-size:.92rem; font-weight:500; text-align:left; width:100%;}
+  .s-nav button i{width:20px; text-align:center; color:var(--gold-500);}
+  .s-nav button:hover{background:rgba(197,155,39,.12); color:#fff;}
+  .s-nav button.active{background:var(--gold-500); color:var(--wood-900); font-weight:600;}
+  .s-nav button.active i{color:var(--wood-900);}
+  .s-foot{padding:16px; border-top:1px solid rgba(197,155,39,.25); font-size:.75rem; color:var(--muted);}
+
+  .main{flex:1; min-width:0; display:flex; flex-direction:column;}
+  .topbar{background:#fff; border-bottom:1px solid var(--border); padding:14px 26px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:50;}
+  .topbar h1{font-size:1.35rem;}
+  .topbar .actions{display:flex; gap:10px; align-items:center;}
+
+  .content{padding:26px; max-width:1200px; width:100%; margin:0 auto;}
+  .page{display:none;} .page.active{display:block; animation:fadeIn .25s ease;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;}}
+
+  /* ---------- BUTTONS ---------- */
+  .btn{display:inline-flex; align-items:center; gap:8px; padding:11px 20px; border-radius:10px; border:none; font-weight:600; font-size:.9rem; transition:.15s;}
+  .btn-gold{background:var(--gold-500); color:var(--wood-900);}
+  .btn-gold:hover{background:var(--gold-600); color:#fff;}
+  .btn-dark{background:var(--wood-900); color:#fff;}
+  .btn-dark:hover{background:var(--wood-700);}
+  .btn-outline{background:#fff; border:1.5px solid var(--border); color:var(--wood-900);}
+  .btn-outline:hover{border-color:var(--gold-500);}
+  .btn-danger{background:#fdecea; color:var(--red); border:1px solid #f5c6c0;}
+  .btn-danger:hover{background:var(--red); color:#fff;}
+  .btn-sm{padding:7px 12px; font-size:.8rem; border-radius:8px;}
+  .btn:disabled{opacity:.6; cursor:not-allowed;}
+  .icon-btn{width:34px; height:34px; border-radius:9px; border:1.5px solid var(--border); background:#fff; color:var(--wood-700); display:inline-flex; align-items:center; justify-content:center;}
+  .icon-btn:hover{border-color:var(--gold-500); color:var(--gold-600);}
+  .icon-btn.danger:hover{background:var(--red); border-color:var(--red); color:#fff;}
+
+  /* ---------- CARDS / STATS ---------- */
+  .stat-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin-bottom:24px;}
+  .stat-card{background:var(--card); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); border:1px solid var(--border); display:flex; gap:14px; align-items:center;}
+  .stat-card .ic{width:52px; height:52px; border-radius:13px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0;}
+  .stat-card .num{font-size:1.6rem; font-weight:700;}
+  .stat-card .lab{font-size:.8rem; color:var(--muted);}
+  .panel{background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--border); overflow:hidden; margin-bottom:22px;}
+  .panel-head{padding:16px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+  .panel-head h3{font-size:1.05rem;}
+  .panel-body{padding:20px;}
+
+  /* ---------- TABLE ---------- */
+  .tbl-wrap{overflow-x:auto;}
+  table.tbl{width:100%; border-collapse:collapse; font-size:.88rem;}
+  table.tbl th{text-align:left; padding:12px 14px; font-size:.75rem; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); border-bottom:2px solid var(--border); white-space:nowrap;}
+  table.tbl td{padding:12px 14px; border-bottom:1px solid #f0e8d8; vertical-align:middle;}
+  table.tbl tr:hover td{background:#fdfaf3;}
+  .p-thumb{width:52px; height:52px; border-radius:10px; object-fit:cover; background:var(--gold-100); border:1px solid var(--border);}
+  .pill{display:inline-block; padding:4px 11px; border-radius:20px; font-size:.75rem; font-weight:600;}
+  .pill.green{background:#e5f6ec; color:var(--green);}
+  .pill.grey{background:#f0ece4; color:var(--muted);}
+  .pill.gold{background:var(--gold-100); color:var(--gold-600);}
+
+  /* ---------- TOGGLE ---------- */
+  .toggle{position:relative; width:44px; height:24px; display:inline-block; flex-shrink:0;}
+  .toggle input{opacity:0; width:0; height:0;}
+  .toggle .track{position:absolute; inset:0; background:#d8cdb8; border-radius:20px; transition:.2s; cursor:pointer;}
+  .toggle .track:before{content:""; position:absolute; width:18px; height:18px; border-radius:50%; background:#fff; top:3px; left:3px; transition:.2s; box-shadow:0 1px 3px rgba(0,0,0,.25);}
+  .toggle input:checked + .track{background:var(--green);}
+  .toggle input:checked + .track:before{transform:translateX(20px);}
+
+  /* ---------- MODAL ---------- */
+  .modal-backdrop{position:fixed; inset:0; background:rgba(26,16,11,.55); display:none; align-items:flex-start; justify-content:center; z-index:200; overflow-y:auto; padding:30px 16px;}
+  .modal-backdrop.open{display:flex;}
+  .modal{background:#fff; border-radius:18px; width:100%; max-width:640px; box-shadow:0 25px 60px rgba(0,0,0,.3); animation:popIn .22s ease;}
+  @keyframes popIn{from{opacity:0; transform:scale(.97) translateY(10px);} to{opacity:1; transform:none;}}
+  .modal-head{padding:18px 22px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;}
+  .modal-head h3{font-size:1.15rem;}
+  .modal-x{border:none; background:#f3ede1; width:34px; height:34px; border-radius:50%; color:var(--wood-700); font-size:1rem;}
+  .modal-x:hover{background:var(--red); color:#fff;}
+  .modal-body{padding:22px;}
+  .modal-foot{padding:16px 22px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:10px;}
+  .form-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .form-grid .full{grid-column:1 / -1;}
+  .field{margin-bottom:2px;}
+  .hint{font-size:.75rem; color:var(--muted); margin-top:4px;}
+
+  /* ---------- IMAGE UPLOAD ---------- */
+  .img-preview-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:10px;}
+  .img-prev{position:relative; width:86px; height:86px; border-radius:10px; overflow:hidden; border:2px solid var(--border);}
+  .img-prev img{width:100%; height:100%; object-fit:cover;}
+  .img-prev .rm{position:absolute; top:4px; right:4px; width:24px; height:24px; border-radius:50%; background:rgba(210,60,46,.95); color:#fff; border:none; font-size:.7rem; display:flex; align-items:center; justify-content:center;}
+  .img-prev.main{border-color:var(--gold-500);}
+  .img-prev .tag{position:absolute; bottom:0; left:0; right:0; background:var(--gold-500); color:var(--wood-900); font-size:.62rem; font-weight:700; text-align:center; padding:2px;}
+  .upload-box{border:2px dashed var(--border); border-radius:12px; padding:22px; text-align:center; color:var(--muted); cursor:pointer; transition:.15s; margin-top:8px; display:block;}
+  .upload-box:hover{border-color:var(--gold-500); color:var(--gold-600); background:#fdf8ec;}
+
+  /* ---------- SETTINGS ---------- */
+  .set-group > h4{font-size:.95rem; color:var(--gold-600); text-transform:uppercase; letter-spacing:1px; margin:18px 0 12px 0; padding-bottom:8px; border-bottom:2px solid var(--gold-100);}
+  .set-group > h4:first-child{margin-top:0;}
+
+  /* ---------- MISC ---------- */
+  .toolbar{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
+  .toolbar input[type="search"]{max-width:260px;}
+  .toolbar select{max-width:200px;}
+  #toast{position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--wood-900); color:#fff; padding:13px 22px; border-radius:12px; font-size:.9rem; z-index:500; transition:.3s; opacity:0; box-shadow:0 10px 30px rgba(0,0,0,.3); max-width:90vw; text-align:center;}
+  #toast.show{transform:translateX(-50%) translateY(0); opacity:1;}
+  #toast.err{background:var(--red);}
+  #loader{position:fixed; inset:0; background:rgba(250,246,239,.75); z-index:400; display:none; align-items:center; justify-content:center;}
+  #loader.show{display:flex;}
+  .spinner{width:46px; height:46px; border:4px solid var(--gold-100); border-top-color:var(--gold-500); border-radius:50%; animation:spin 0.8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .empty-box{text-align:center; padding:50px 20px; color:var(--muted);}
+  .empty-box i{font-size:2.6rem; color:var(--gold-500); margin-bottom:12px;}
+  .cat-card{display:flex; align-items:center; gap:14px; background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:14px 16px; box-shadow:var(--shadow);}
+  .cat-card img{width:64px; height:64px; border-radius:12px; object-fit:cover; background:var(--gold-100); border:1px solid var(--border);}
+  .cat-card .nm{font-weight:600;}
+  .cat-card .sl{font-size:.75rem; color:var(--muted);}
+  .cat-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:14px;}
+  .menu-btn{display:none;}
+  .row-actions{display:flex; gap:6px; justify-content:flex-end;}
+
+  @media (max-width:860px){
+    .sidebar{position:fixed; left:-260px; top:0; z-index:300; transition:.25s;}
+    .sidebar.open{left:0; box-shadow:0 0 60px rgba(0,0,0,.4);}
+    .menu-btn{display:inline-flex;}
+    .form-grid{grid-template-columns:1fr;}
+    .content{padding:16px;}
+    .topbar{padding:12px 16px;}
+  }
+</style>
+</head>
 <body>
 
-  <!-- Top Announcement Bar -->
-  <div class="announcement-bar">
-    <div class="container announcement-content">
-      <div class="announcement-item">
-        <i class="fa-solid fa-shield-halved"></i>
-        <span>Admin Panel - Devwood Dekor</span>
-      </div>
-      <div class="announcement-item">
-        <button class="admin-logout-btn" onclick="logoutAdmin()"
-          style="background: transparent; border: none; color: var(--cream-200); font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-          <i class="fa-solid fa-sign-out-alt"></i> Logout
+<!-- ==================== LOGIN ==================== -->
+<div id="loginView" style="display:none;">
+  <div class="login-card">
+      <div class="brand">Devwood <span>Dekor</span></div>
+      <p class="sub">Admin Panel — apne email aur password se login karein</p>
+      <div class="login-err" id="loginErr"></div>
+      <form id="loginForm">
+        <div class="field" style="text-align:left; margin-bottom:14px;">
+          <label class="lbl">Email</label>
+          <input type="email" id="loginEmail" placeholder="admin@example.com" required autocomplete="username">
+        </div>
+        <div class="field" style="text-align:left; margin-bottom:20px;">
+          <label class="lbl">Password</label>
+          <input type="password" id="loginPass" placeholder="••••••••" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn btn-gold" id="loginBtn" style="width:100%; justify-content:center; padding:13px;">
+          <i class="fa-solid fa-right-to-bracket"></i> Login
         </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Header -->
-  <header class="main-header">
-    <div class="container nav-wrapper">
-      <a href="index.html" class="brand-logo">
-        <div class="brand-icon">
-          <i class="fa-solid fa-crown"></i>
-        </div>
-        <div class="brand-text-wrap">
-          <span class="brand-title">DEVWOOD <span>DEKOR</span></span>
-          <span class="brand-tagline">ADMIN PANEL</span>
-        </div>
-      </a>
-
-      <nav class="desktop-nav">
-        <a href="index.html" class="nav-link">Home</a>
-        <a href="shop.html" class="nav-link">Shop Collection</a>
-        <a href="about.html" class="nav-link">Heritage & Artisans</a>
-        <a href="contact.html" class="nav-link">Contact & Location</a>
-        <a href="admin.html" class="nav-link active">Admin Panel</a>
-      </nav>
-
-      <div class="header-actions">
-        <a href="https://wa.me/919783656009" target="_blank" class="whatsapp-direct-btn">
-          <i class="fa-brands fa-whatsapp"></i>
-          <span>Chat 9783656009</span>
-        </a>
-
-        <button class="action-btn" onclick="openCartDrawer()" title="View Cart">
-          <i class="fa-solid fa-bag-shopping"></i>
-          <span class="badge-count cart-count-badge" style="display: none;">0</span>
-        </button>
-
-        <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" title="Toggle Navigation">
-          <i class="fa-solid fa-bars"></i>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- Mobile Drawer -->
-  <div class="mobile-nav-drawer" id="mobileNavDrawer">
-    <div
-      style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1);">
-      <div class="brand-title" style="color: #fff; font-size: 1.3rem;">DEVWOOD <span>DEKOR</span></div>
-      <button onclick="toggleMobileMenu()" style="background: transparent; color: #fff; font-size: 1.4rem;">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
-    <ul class="mobile-nav-links">
-      <li><a href="index.html"><i class="fa-solid fa-house"></i> Home</a></li>
-      <li><a href="shop.html"><i class="fa-solid fa-couch"></i> Shop Collection</a></li>
-      <li><a href="about.html"><i class="fa-solid fa-feather-pointed"></i> Heritage & Artisans</a></li>
-      <li><a href="contact.html"><i class="fa-solid fa-location-dot"></i> Contact & Location</a></li>
-      <li style="margin-top: 20px;">
-        <button onclick="logoutAdmin(); toggleMobileMenu();" class="btn btn-outline"
-          style="width: 100%; font-size: 0.9rem; color: var(--cream-200); border-color: var(--cream-200);">
-          <i class="fa-solid fa-sign-out-alt"></i> Admin Logout
-        </button>
-      </li>
-      <li style="margin-top: 20px;">
-        <a href="tel:9783656009" style="color: var(--gold-400);"><i class="fa-solid fa-phone"></i> Call: 9783656009</a>
-      </li>
-    </ul>
-  </div>
-
-  <!-- Page Hero Header -->
-  <div class="page-hero-header">
-    <div class="container">
-      <h1 class="page-hero-title">Admin Panel</h1>
-      <div class="breadcrumbs">
-        <a href="index.html">Home</a>
-        <span>/</span>
-        <span>Admin Panel</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Admin Dashboard -->
-  <section class="products-section" style="padding: 60px 0 90px 0;">
-    <div class="container">
-
-      <!-- Stats Cards -->
-      <div
-        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px;">
-        <div class="stat-card">
-          <i class="fa-solid fa-couch"></i>
-          <div class="stat-info">
-            <span class="stat-value" id="statTotalProducts">0</span>
-            <span class="stat-label">Total Products</span>
-          </div>
-        </div>
-        <div class="stat-card">
-          <i class="fa-solid fa-gem"></i>
-          <div class="stat-info">
-            <span class="stat-value" id="statAntiques">0</span>
-            <span class="stat-label">Antiques</span>
-          </div>
-        </div>
-        <div class="stat-card">
-          <i class="fa-solid fa-box"></i>
-          <div class="stat-info">
-            <span class="stat-value" id="statFurniture">0</span>
-            <span class="stat-label">Furniture</span>
-          </div>
-        </div>
-        <div class="stat-card">
-          <i class="fa-solid fa-bag-shopping"></i>
-          <div class="stat-info">
-            <span class="stat-value" id="statOrders">0</span>
-            <span class="stat-label">Orders (Cart)</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Add Product Button -->
-      <div
-        style="margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
-        <h3 style="font-family: var(--font-serif); color: var(--wood-900);">Product Management</h3>
-        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-          <button onclick="openChangePasswordModal()" class="btn btn-outline" style="border-color: var(--gold-500); color: var(--gold-600); padding: 10px 18px; font-size: 0.9rem;">
-            <i class="fa-solid fa-key"></i> Change Password
-          </button>
-          <button onclick="openAddProductModal()" class="btn btn-gold">
-            <i class="fa-solid fa-plus"></i> Add New Product
-          </button>
-        </div>
-      </div>
-
-      <!-- Product Table -->
-      <div
-        style="background: #fff; border-radius: 12px; border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); overflow: hidden;">
-        <div style="overflow-x: auto;">
-          <table style="width: 100%; border-collapse: collapse;">
-            <thead>
-              <tr style="background: var(--wood-900); color: #fff;">
-                <th style="padding: 16px; text-align: left;">Image</th>
-                <th style="padding: 16px; text-align: left;">Name</th>
-                <th style="padding: 16px; text-align: left;">Category</th>
-                <th style="padding: 16px; text-align: left;">Price</th>
-                <th style="padding: 16px; text-align: left;">Stock</th>
-                <th style="padding: 16px; text-align: left;">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="adminProductTableBody">
-              <!-- Products rendered by JS -->
-            </tbody>
-          </table>
-        </div>
-        <div id="adminEmptyState" style="display: none; padding: 60px 20px; text-align: center;">
-          <i class="fa-solid fa-box-open" style="font-size: 3rem; color: var(--cream-300); margin-bottom: 16px;"></i>
-          <h3 style="font-family: var(--font-serif); color: var(--wood-900); margin-bottom: 8px;">No Products Yet</h3>
-          <p style="color: var(--muted-text); margin-bottom: 20px;">Click "Add New Product" to create your first
-            product.</p>
-          <button onclick="openAddProductModal()" class="btn btn-gold">
-            <i class="fa-solid fa-plus"></i> Add New Product
-          </button>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- Add Product Modal (Naya Product Dalne Ke Liye) -->
-  <div class="modal-backdrop" id="addProductModal">
-    <div class="modal-box" style="display: block; max-width: 650px; padding: 32px;">
-      <button class="modal-close-btn" onclick="closeAddProductModal()" title="Close">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-
-      <div style="margin-bottom: 20px;">
-        <span class="section-subtitle">Devwood Dekor Store</span>
-        <h3 style="font-family: var(--font-serif); font-size: 1.8rem; color: var(--wood-900);">
-          <i class="fa-solid fa-plus-circle" style="color: var(--gold-500);"></i> Naya Product Add Karein
-        </h3>
-        <p style="font-size: 0.88rem; color: var(--muted-text); margin-top: 4px;">
-          Naya product add karne ke liye details bharein aur apni mobile ya computer gallery se photo upload karein.
-        </p>
-      </div>
-
-      <form id="newProductForm" onsubmit="handleAddNewProduct(event)">
-        <div class="form-group">
-          <label class="form-label">Product Ka Naam *</label>
-          <input type="text" id="newProdName" class="form-control" placeholder="e.g. Royal Carved Center Table"
-            required>
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-          <div class="form-group">
-            <label class="form-label">Category *</label>
-            <select id="newProdCategory" class="form-control" required>
-              <option value="living">Living & Sofa (लिविंग रूम और सोफा)</option>
-              <option value="dining">Dining Sets (डाइनिंग टेबल व कुर्सियां)</option>
-              <option value="bedroom">Beds & Bedroom (पलंग और बेडरूम)</option>
-              <option value="mandir">Pooja Mandir (पूजा मंदिर)</option>
-              <option value="tables">Center & Coffee Tables (सेंटर / साइड टेबल)</option>
-              <option value="storage">Wardrobes & Storage (अलमारी / वॉर्डरोब)</option>
-              <option value="wall-decor">Jharokhas & Wall Decor (झरोखा / वॉल आर्ट)</option>
-              <option value="antiques">Rare Antiques & Brass (हवेली एंटीक्स / पीतल)</option>
-              <option value="office">Study & Office Desks (स्टडी व ऑफिस टेबल)</option>
-              <option value="furniture">Other Wooden Furniture (अन्य फर्नीचर)</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Selling Price (₹) *</label>
-            <input type="number" id="newProdPrice" class="form-control" placeholder="e.g. 24000" required>
-          </div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-          <div class="form-group">
-            <label class="form-label">Original Price (₹) - Cut Price</label>
-            <input type="number" id="newProdOldPrice" class="form-control" placeholder="e.g. 30000">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Wood / Material *</label>
-            <input type="text" id="newProdWood" class="form-control" placeholder="e.g. Solid Sheesham / Teak / Brass"
-              required>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Dimensions (Size)</label>
-          <input type="text" id="newProdDimensions" class="form-control" placeholder="e.g. 48 L x 24 W x 18 H inch">
-        </div>
-
-        <!-- Gallery Photo Upload Area -->
-        <div class="form-group" style="margin: 16px 0;">
-          <label class="form-label"
-            style="font-weight: 700; color: var(--wood-900); display: flex; align-items: center; justify-content: space-between;">
-            <span><i class="fa-solid fa-camera" style="color: var(--gold-500);"></i> Product Photo (Gallery se Upload
-              Karein)</span>
-            <span style="font-size: 0.76rem; color: var(--gold-600); font-weight: normal;">* Mobile / PC Gallery</span>
-          </label>
-
-          <div class="gallery-upload-box" id="galleryUploadBox"
-            onclick="document.getElementById('newProdGalleryFile').click()"
-            style="border: 2px dashed var(--gold-500); border-radius: 10px; padding: 22px; text-align: center; background: var(--cream-50); cursor: pointer; transition: all 0.25s ease;">
-            <input type="file" id="newProdGalleryFile" accept="image/*" style="display: none;"
-              onchange="handleGalleryPhotoSelect(event)">
-
-            <div id="galleryUploadPrompt">
-              <i class="fa-solid fa-cloud-arrow-up"
-                style="font-size: 2.2rem; color: var(--gold-600); margin-bottom: 8px;"></i>
-              <div style="font-weight: 700; color: var(--wood-900); font-size: 1rem;">Gallery se Photo Chunein</div>
-              <div style="font-size: 0.8rem; color: var(--muted-text); margin-top: 4px;">Click karein aur apni gallery
-                ya files se photo select karein</div>
-            </div>
-
-            <div id="galleryUploadPreview"
-              style="display: none; flex-direction: column; align-items: center; gap: 10px;">
-              <img id="galleryPreviewImg" src="" alt="Selected Photo"
-                style="max-height: 180px; max-width: 100%; border-radius: 8px; border: 2px solid var(--gold-500); box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-              <button type="button" onclick="clearSelectedPhoto(event)" class="btn btn-outline"
-                style="padding: 6px 14px; font-size: 0.8rem; border-color: #e74c3c; color: #e74c3c;">
-                <i class="fa-solid fa-trash"></i> Doosri Photo Chunein
-              </button>
-            </div>
-          </div>
-          <input type="hidden" id="newProdBase64" value="">
-
-          <div style="margin-top: 8px; text-align: right;">
-            <small style="color: var(--muted-text); font-size: 0.76rem;">Ya online link ho toh: </small>
-            <input type="text" id="newProdImage" class="form-control" placeholder="https://... link (optional)"
-              style="display: inline-block; width: 62%; padding: 6px 10px; font-size: 0.82rem; margin-top: 4px;">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Description (Jaankari)</label>
-          <textarea id="newProdDesc" class="form-control" style="min-height: 80px;"
-            placeholder="Product ki khasiyat, lakdi aur polish ke baare mein likhein..."></textarea>
-        </div>
-
-        <div style="display: flex; gap: 12px; margin-top: 25px;">
-          <button type="submit" class="btn btn-gold" style="flex: 1; padding: 13px;">
-            <i class="fa-solid fa-check"></i> Save & Publish Product
-          </button>
-          <button type="button" onclick="closeAddProductModal()" class="btn btn-outline" style="padding: 13px 20px;">
-            Cancel
-          </button>
-        </div>
       </form>
-    </div>
+      <p class="hint" style="margin-top:18px;">Login Supabase me banta hai.<br>Setup ke liye <b>SUPABASE-SETUP.md</b> ka Step 3 dekhein.</p>
   </div>
+</div>
 
-  <!-- Footer -->
-  <footer class="main-footer">
-    <div class="container">
-      <div class="footer-bottom">
-        <div>© 2026 Devwood Dekor Admin Panel. All Rights Reserved.</div>
-        <div>Sardarshahar, Rajasthan | Contact: 9783656009</div>
-      </div>
+<!-- ==================== APP ==================== -->
+<div id="appView" class="hidden">
+  <aside class="sidebar" id="sidebar">
+    <div class="s-brand">
+      <h2>Devwood <span>Dekor</span></h2>
+      <small>Admin Panel</small>
     </div>
-  </footer>
-
-  <!-- Slide-out Cart Drawer -->
-  <div class="cart-drawer-backdrop" id="cartBackdrop" onclick="closeCartDrawer()"></div>
-  <aside class="cart-drawer" id="cartDrawer">
-    <div class="cart-header">
-      <h3><i class="fa-solid fa-bag-shopping"></i> Your Selected Items</h3>
-      <button class="close-cart-btn" onclick="closeCartDrawer()" title="Close Cart">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
-    <div class="cart-items-container" id="cartItemsList"></div>
-    <div class="cart-footer">
-      <div class="cart-subtotal">
-        <span>Subtotal:</span>
-        <span id="cartSubtotalAmount">₹0</span>
-      </div>
-      <button class="btn-checkout-whatsapp" onclick="checkoutViaWhatsApp()">
-        <i class="fa-brands fa-whatsapp" style="font-size: 1.3rem;"></i>
-        <span>Confirm Order on WhatsApp</span>
-      </button>
-    </div>
+    <nav class="s-nav">
+      <button data-page="dashboard" class="active"><i class="fa-solid fa-gauge-high"></i> Dashboard</button>
+      <button data-page="products"><i class="fa-solid fa-couch"></i> Products</button>
+      <button data-page="categories"><i class="fa-solid fa-layer-group"></i> Categories</button>
+      <button data-page="settings"><i class="fa-solid fa-gear"></i> Settings</button>
+      <button onclick="window.open('index.html','_blank')"><i class="fa-solid fa-globe"></i> Website Dekhein</button>
+      <button id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+    </nav>
+    <div class="s-foot" id="adminEmailLine">—</div>
   </aside>
 
-  <!-- Quick View Modal -->
-  <div class="modal-backdrop" id="quickViewModal">
-    <div class="modal-box">
-      <button class="modal-close-btn" onclick="closeQuickView()" title="Close">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-      <div id="quickViewContent" style="display: contents;"></div>
-    </div>
-  </div>
-
-  <!-- Floating WhatsApp -->
-  <a href="https://wa.me/919783656009?text=Hello%20Devwood%20Dekor,%20I%20am%20browsing%20your%20website%20and%20want%20to%20enquire."
-    target="_blank" class="floating-whatsapp" title="Chat on WhatsApp (+91 9783656009)">
-    <i class="fa-brands fa-whatsapp"></i>
-  </a>
-
-  <!-- Admin Styles -->
-  <style>
-    .stat-card {
-      background: #fff;
-      padding: 24px;
-      border-radius: 12px;
-      border: 1px solid var(--border-light);
-      box-shadow: var(--shadow-sm);
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .stat-card i {
-      font-size: 2rem;
-      color: var(--gold-500);
-      width: 56px;
-      height: 56px;
-      background: var(--cream-100);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .stat-value {
-      display: block;
-      font-family: var(--font-royal);
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--wood-900);
-      line-height: 1.2;
-    }
-
-    .stat-label {
-      font-size: 0.85rem;
-      color: var(--muted-text);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    #adminProductTableBody tr {
-      border-bottom: 1px solid var(--border-light);
-      transition: background 0.2s;
-    }
-
-    #adminProductTableBody tr:hover {
-      background: var(--cream-50);
-    }
-
-    #adminProductTableBody td {
-      padding: 16px;
-      vertical-align: middle;
-    }
-
-    .admin-product-img {
-      width: 60px;
-      height: 60px;
-      border-radius: 8px;
-      object-fit: cover;
-      background: var(--cream-100);
-    }
-
-    .admin-product-name {
-      font-weight: 600;
-      color: var(--wood-900);
-      max-width: 250px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .admin-category-badge {
-      font-size: 0.75rem;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .admin-category-badge.furniture {
-      background: var(--cream-100);
-      color: var(--wood-800);
-    }
-
-    .admin-category-badge.antiques {
-      background: #fef3e2;
-      color: #c45a00;
-    }
-
-    .admin-price {
-      font-weight: 700;
-      color: var(--wood-900);
-    }
-
-    .admin-stock {
-      color: var(--muted-text);
-      font-size: 0.9rem;
-    }
-
-    .admin-actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    .admin-action-btn {
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.9rem;
-      transition: var(--transition-fast);
-      border: 1px solid transparent;
-    }
-
-    .admin-edit-btn {
-      background: var(--cream-100);
-      color: var(--gold-600);
-      border-color: var(--border-gold);
-    }
-
-    .admin-edit-btn:hover {
-      background: var(--gold-500);
-      color: var(--wood-900);
-    }
-
-    .admin-delete-btn {
-      background: #fff0f0;
-      color: #e74c3c;
-      border-color: #fadbd8;
-    }
-
-    .admin-delete-btn:hover {
-      background: #e74c3c;
-      color: #fff;
-    }
-
-    @media (max-width: 768px) {
-      .stat-card {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      .stat-card i {
-        width: 48px;
-        height: 48px;
-        font-size: 1.5rem;
-      }
-
-      #adminProductTableBody td {
-        padding: 12px 8px;
-      }
-    }
-  </style>
-
-  <script src="main.js"></script>
-  <script>
-    // Admin panel specific initialization
-    document.addEventListener("DOMContentLoaded", () => {
-      // Direct redirect to home page if not authenticated
-      if (!isAdminLoggedIn()) {
-        window.location.replace("index.html");
-        return;
-      }
-      updateAdminUI();
-      renderAdminProducts();
-      updateAdminStats();
-    });
-
-    function renderAdminProducts() {
-      const tbody = document.getElementById("adminProductTableBody");
-      const emptyState = document.getElementById("adminEmptyState");
-      const products = getProducts();
-
-      if (products.length === 0) {
-        tbody.innerHTML = "";
-        emptyState.style.display = "block";
-        return;
-      }
-
-      emptyState.style.display = "none";
-      tbody.innerHTML = products.map(product => `
-        <tr>
-          <td>
-            ${product.image
-          ? `<img src="${product.image}" alt="${product.name}" class="admin-product-img">`
-          : `<div class="admin-product-img" style="display:flex;align-items:center;justify-content:center;color:var(--gold-500);"><i class="${getCategoryIcon(product.subcategory || product.category)}"></i></div>`
-        }
-          </td>
-          <td><span class="admin-product-name">${product.name}</span></td>
-          <td>
-            <span class="admin-category-badge ${product.category}">
-              ${product.category === 'antiques' ? 'Antique' : 'Furniture'}
-              ${product.subcategory && product.subcategory !== product.category ? ` - ${product.subcategory}` : ''}
-            </span>
-          </td>
-          <td class="admin-price">${STORE_CONFIG.currency}${product.price.toLocaleString('en-IN')}</td>
-          <td class="admin-stock">In Stock</td>
-          <td>
-            <div class="admin-actions">
-              <button class="admin-action-btn admin-edit-btn" onclick="editProduct('${product.id}')" title="Edit">
-                <i class="fa-solid fa-pen"></i>
-              </button>
-              <button class="admin-action-btn admin-delete-btn" onclick="deleteUserProduct('${product.id}')" title="Delete">
-                <i class="fa-solid fa-trash"></i>
-              </button>
-            </div>
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    function updateAdminStats() {
-      const products = getProducts();
-      document.getElementById("statTotalProducts").textContent = products.length;
-      document.getElementById("statAntiques").textContent = products.filter(p => p.category === 'antiques').length;
-      document.getElementById("statFurniture").textContent = products.filter(p => p.category === 'furniture').length;
-
-      try {
-        const cart = JSON.parse(localStorage.getItem("devwood_cart") || "[]");
-        document.getElementById("statOrders").textContent = cart.length;
-      } catch (e) {
-        document.getElementById("statOrders").textContent = 0;
-      }
-    }
-
-    function editProduct(productId) {
-      const product = PRODUCTS.find(p => p.id === productId);
-      if (!product) return;
-
-      // Populate form and open modal
-      document.getElementById("newProdName").value = product.name;
-      document.getElementById("newProdCategory").value = product.subcategory || product.category;
-      document.getElementById("newProdPrice").value = product.price;
-      document.getElementById("newProdOldPrice").value = product.originalPrice;
-      document.getElementById("newProdWood").value = product.woodType;
-      document.getElementById("newProdDimensions").value = product.dimensions;
-      document.getElementById("newProdDesc").value = product.description;
-      document.getElementById("newProdImage").value = product.image || "";
-      document.getElementById("newProdBase64").value = "";
-
-      // Update form to edit mode
-      const form = document.getElementById("newProductForm");
-      form.dataset.editId = productId;
-      const submitBtn = form.querySelector('button[type="submit"]');
-      submitBtn.innerHTML = '<i class="fa-solid fa-save"></i> Update Product';
-
-      openAddProductModal(true);
-    }
-
-    // Override handleAddNewProduct to support editing
-    const originalHandleAdd = handleAddNewProduct;
-    window.handleAddNewProduct = async function (event) {
-      event.preventDefault();
-      const form = document.getElementById("newProductForm");
-      const editId = form.dataset.editId;
-
-      if (editId) {
-        // Edit mode
-        const authorized = await requireAdminAuth();
-        if (!authorized) return;
-
-        const name = document.getElementById("newProdName").value.trim();
-        const subcategory = document.getElementById("newProdCategory").value;
-        const price = parseInt(document.getElementById("newProdPrice").value);
-        const woodType = document.getElementById("newProdWood").value.trim();
-
-        if (!name || !subcategory || !price || !woodType) {
-          showToast("Please fill all required fields");
-          return;
-        }
-
-        const categoryMap = {
-          "living": "furniture",
-          "dining": "furniture",
-          "bedroom": "furniture",
-          "mandir": "furniture",
-          "tables": "furniture",
-          "storage": "furniture",
-          "office": "furniture",
-          "wall-decor": "antiques",
-          "antiques": "antiques",
-          "furniture": "furniture"
-        };
-        const category = categoryMap[subcategory] || "furniture";
-
-        const originalPrice = parseInt(document.getElementById("newProdOldPrice").value) || Math.round(price * 1.2);
-        const dimensions = document.getElementById("newProdDimensions").value.trim() || "Standard Size";
-        const galleryPhoto = document.getElementById("newProdBase64").value.trim();
-        let userProducts = JSON.parse(localStorage.getItem("devwood_user_products") || "[]");
-        const existingProd = userProducts.find(p => p.id === editId);
-        const linkPhoto = document.getElementById("newProdImage") ? document.getElementById("newProdImage").value.trim() : "";
-        const finalImage = galleryPhoto || linkPhoto || (existingProd ? existingProd.image : "");
-        const desc = document.getElementById("newProdDesc").value.trim() || (existingProd ? existingProd.description : "");
-        const index = userProducts.findIndex(p => p.id === editId);
-        if (index !== -1) {
-          userProducts[index] = { ...userProducts[index], name, category, subcategory, price, originalPrice, woodType, dimensions, image: finalImage, description: desc };
-          localStorage.setItem("devwood_user_products", JSON.stringify(userProducts));
-          PRODUCTS = getProducts();
-          showToast("Product updated successfully!");
-          closeAddProductModal();
-          form.reset();
-          delete form.dataset.editId;
-          form.querySelector('button[type="submit"]').innerHTML = '<i class="fa-solid fa-check"></i> Save & Publish Product';
-          if (typeof window.refreshShopProducts === "function") window.refreshShopProducts();
-          renderAdminProducts();
-          updateAdminStats();
-        }
-        return;
-      }
-
-      // Original add logic
-      return originalHandleAdd(event);
-    }
-  </script>
-
-  <!-- Change Admin Password Modal -->
-  <div class="modal-backdrop" id="changePasswordModal">
-    <div class="modal-box" style="display: block; max-width: 440px; padding: 32px; position: relative;">
-      <button class="modal-close-btn" onclick="closeChangePasswordModal()" title="Close">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-      <div style="text-align: center; margin-bottom: 22px;">
-        <i class="fa-solid fa-key" style="font-size: 2.4rem; color: var(--gold-500); margin-bottom: 12px; display: inline-block;"></i>
-        <h3 style="font-family: var(--font-serif); color: var(--wood-900); font-size: 1.5rem; margin: 0 0 6px 0;">Admin Password Badlein</h3>
-        <p style="color: var(--muted-text); font-size: 0.88rem; margin: 0;">Apna naya secret password darj karein. Yeh kewal aapko hi pata hoga.</p>
+  <div class="main">
+    <div class="topbar">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <button class="icon-btn menu-btn" id="menuBtn"><i class="fa-solid fa-bars"></i></button>
+        <h1 id="pageTitle">Dashboard</h1>
       </div>
-      <form id="changePasswordForm" onsubmit="handleChangePasswordSubmit(event)">
-        <div class="form-group" style="margin-bottom: 18px;">
-          <label class="form-label" style="font-weight: 700; color: var(--wood-900); margin-bottom: 8px;">Naya Password</label>
-          <input type="password" id="newAdminPasswordInput" class="form-control" placeholder="Kam se kam 4 akshar" required minlength="4">
+      <div class="actions">
+        <button class="btn btn-gold btn-sm" onclick="openProductModal()"><i class="fa-solid fa-plus"></i> Naya Product</button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ======= DASHBOARD ======= -->
+      <section class="page active" id="page-dashboard">
+        <div class="stat-grid" id="statGrid"></div>
+        <div class="panel">
+          <div class="panel-head">
+            <h3><i class="fa-solid fa-clock-rotate-left" style="color:var(--gold-500);"></i> Latest Products</h3>
+            <button class="btn btn-outline btn-sm" onclick="showPage('products')">Sab Dekhein <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+          <div class="tbl-wrap"><table class="tbl"><tbody id="recentTbl"></tbody></table></div>
         </div>
-        <div class="form-group" style="margin-bottom: 24px;">
-          <label class="form-label" style="font-weight: 700; color: var(--wood-900); margin-bottom: 8px;">Password Confirm Karein</label>
-          <input type="password" id="confirmAdminPasswordInput" class="form-control" placeholder="Wahi password dobara likhein" required minlength="4">
+        <div class="panel">
+          <div class="panel-head"><h3><i class="fa-solid fa-bolt" style="color:var(--gold-500);"></i> Quick Actions</h3></div>
+          <div class="panel-body" style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn btn-dark" onclick="openProductModal()"><i class="fa-solid fa-plus"></i> Product Add Karein</button>
+            <button class="btn btn-outline" onclick="openCategoryModal()"><i class="fa-solid fa-layer-group"></i> Category Add Karein</button>
+            <button class="btn btn-outline" onclick="showPage('settings')"><i class="fa-solid fa-phone"></i> Number / Address Badlein</button>
+            <button class="btn btn-outline" onclick="window.open('index.html','_blank')"><i class="fa-solid fa-globe"></i> Website Kholein</button>
+          </div>
         </div>
-        <div style="display: flex; gap: 12px;">
-          <button type="button" class="btn btn-outline" onclick="closeChangePasswordModal()" style="flex: 1; padding: 12px;">Cancel</button>
-          <button type="submit" class="btn btn-gold" style="flex: 1; padding: 12px; font-weight: 700;">
-            <i class="fa-solid fa-check"></i> Save Password
-          </button>
+      </section>
+
+      <!-- ======= PRODUCTS ======= -->
+      <section class="page" id="page-products">
+        <div class="panel">
+          <div class="panel-head">
+            <h3><i class="fa-solid fa-couch" style="color:var(--gold-500);"></i> Products <span id="prodCount" class="pill gold" style="margin-left:8px;"></span></h3>
+            <div class="toolbar">
+              <input type="search" id="prodSearch" placeholder="Search product...">
+              <select id="prodCatFilter"><option value="">Sab Categories</option></select>
+              <button class="btn btn-gold btn-sm" onclick="openProductModal()"><i class="fa-solid fa-plus"></i> Add Product</button>
+            </div>
+          </div>
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead><tr><th>Photo</th><th>Product</th><th>Category</th><th>Price</th><th>Featured</th><th>Active</th><th style="text-align:right;">Action</th></tr></thead>
+              <tbody id="prodTbl"></tbody>
+            </table>
+          </div>
+          <div id="prodEmpty" class="empty-box hidden">
+            <i class="fa-solid fa-couch"></i>
+            <h3>Koi product nahi mila</h3>
+            <p>Pehla product add karne ke liye upar "Add Product" dabayein.</p>
+          </div>
         </div>
-      </form>
+      </section>
+
+      <!-- ======= CATEGORIES ======= -->
+      <section class="page" id="page-categories">
+        <div class="panel">
+          <div class="panel-head">
+            <h3><i class="fa-solid fa-layer-group" style="color:var(--gold-500);"></i> Categories</h3>
+            <button class="btn btn-gold btn-sm" onclick="openCategoryModal()"><i class="fa-solid fa-plus"></i> Add Category</button>
+          </div>
+          <div class="panel-body">
+            <p class="hint" style="margin-bottom:14px;">Website par <b>Home</b> aur <b>Shop</b> page par yehi categories dikhengi. Photo wali category card zyada sundar lagti hai.</p>
+            <div class="cat-grid" id="catGrid"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======= SETTINGS ======= -->
+      <section class="page" id="page-settings">
+        <div class="panel">
+          <div class="panel-head">
+            <h3><i class="fa-solid fa-gear" style="color:var(--gold-500);"></i> Website Settings</h3>
+            <button class="btn btn-gold btn-sm" id="saveSettingsBtn"><i class="fa-solid fa-floppy-disk"></i> Save Settings</button>
+          </div>
+          <div class="panel-body">
+            <div class="set-group">
+              <h4><i class="fa-solid fa-store"></i> Store ki Jaankari</h4>
+              <div class="form-grid">
+                <div class="field"><label class="lbl">Site Name</label><input id="set-site_name"></div>
+                <div class="field"><label class="lbl">Tagline</label><input id="set-tagline"></div>
+                <div class="field"><label class="lbl">Phone Number (dikhne wala)</label><input id="set-phone" placeholder="+91 98765 43210"></div>
+                <div class="field"><label class="lbl">WhatsApp Number (bina + ke, sirf digits)</label><input id="set-whatsapp" placeholder="919876543210"><div class="hint">Enquiry button isi number par jayega</div></div>
+                <div class="field full"><label class="lbl">Address</label><textarea id="set-address" style="min-height:64px;"></textarea></div>
+                <div class="field full"><label class="lbl">Google Map Link (optional)</label><input id="set-map_url" placeholder="https://maps.google.com/..."></div>
+              </div>
+            </div>
+            <div class="set-group">
+              <h4><i class="fa-solid fa-house"></i> Homepage</h4>
+              <div class="form-grid">
+                <div class="field full"><label class="lbl">Announcement Bar (khali = chhupa rahega)</label><input id="set-announcement" placeholder="Diwali Sale — 20% off!"></div>
+                <div class="field"><label class="lbl">Hero Badge (chhota pill text)</label><input id="set-hero_badge"></div>
+                <div class="field"><label class="lbl">Hero Title</label><input id="set-hero_title"></div>
+                <div class="field full"><label class="lbl">Hero Subtitle</label><textarea id="set-hero_subtitle" style="min-height:64px;"></textarea></div>
+                <div class="field full"><label class="lbl">Hero Background Photo</label>
+                  <div class="img-preview-row" id="heroImgPrev"></div>
+                  <label class="upload-box"><i class="fa-solid fa-cloud-arrow-up"></i> Photo chunein<input type="file" id="heroImgInput" accept="image/*" class="hidden"></label>
+                </div>
+              </div>
+            </div>
+            <div class="set-group">
+              <h4><i class="fa-solid fa-circle-info"></i> About Section</h4>
+              <div class="form-grid">
+                <div class="field"><label class="lbl">About Title</label><input id="set-about_title"></div>
+                <div class="field"><label class="lbl">About Photo</label>
+                  <div class="img-preview-row" id="aboutImgPrev"></div>
+                  <label class="upload-box" style="padding:14px;"><i class="fa-solid fa-cloud-arrow-up"></i> Photo chunein<input type="file" id="aboutImgInput" accept="image/*" class="hidden"></label>
+                </div>
+                <div class="field full"><label class="lbl">About Text</label><textarea id="set-about_text"></textarea></div>
+              </div>
+            </div>
+            <div class="set-group">
+              <h4><i class="fa-solid fa-thumbs-up"></i> Social Media</h4>
+              <div class="form-grid">
+                <div class="field"><label class="lbl">Facebook Link</label><input id="set-facebook" placeholder="https://facebook.com/..."></div>
+                <div class="field"><label class="lbl">Instagram Link</label><input id="set-instagram" placeholder="https://instagram.com/..."></div>
+                <div class="field"><label class="lbl">YouTube Link</label><input id="set-youtube" placeholder="https://youtube.com/..."></div>
+                <div class="field"><label class="lbl">Footer Text</label><input id="set-footer_text"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
     </div>
   </div>
+</div>
 
-  <script>
-    function openChangePasswordModal() {
-      const modal = document.getElementById("changePasswordModal");
-      if (modal) {
-        document.getElementById("changePasswordForm").reset();
-        modal.classList.add("active");
-        setTimeout(() => document.getElementById("newAdminPasswordInput")?.focus(), 150);
-      }
+<!-- ==================== PRODUCT MODAL ==================== -->
+<div class="modal-backdrop" id="productModal">
+  <div class="modal">
+    <div class="modal-head"><h3 id="prodModalTitle">Naya Product</h3><button class="modal-x" onclick="closeModal('productModal')"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="field full"><label class="lbl">Product Ka Naam *</label><input id="pf-name" placeholder="Royal Sheesham Jhula"></div>
+        <div class="field"><label class="lbl">Category *</label><select id="pf-category"></select></div>
+        <div class="field"><label class="lbl">Badge (optional)</label><input id="pf-badge" placeholder="Best Seller / New Arrival"></div>
+        <div class="field"><label class="lbl">Price (₹) *</label><input id="pf-price" type="number" min="0" placeholder="25000"></div>
+        <div class="field"><label class="lbl">MRP (₹) — kata hua daam</label><input id="pf-mrp" type="number" min="0" placeholder="30000"></div>
+        <div class="field"><label class="lbl">Wood Type</label><input id="pf-wood" placeholder="Solid Sheesham Wood"></div>
+        <div class="field"><label class="lbl">Finish / Polish</label><input id="pf-finish" placeholder="Teak Brown Polish"></div>
+        <div class="field full"><label class="lbl">Dimensions</label><input id="pf-dims" placeholder='72" L x 36" W x 40" H'></div>
+        <div class="field full"><label class="lbl">Description</label><textarea id="pf-desc" placeholder="Product ke baare me 2-3 line likhein..."></textarea></div>
+        <div class="field full"><label class="lbl">Photos * (pehli photo = main photo)</label>
+          <div class="img-preview-row" id="pfImgPrev"></div>
+          <label class="upload-box"><i class="fa-solid fa-cloud-arrow-up" style="font-size:1.6rem;"></i><div style="margin-top:8px; font-weight:600;">Photos chunein (ek se zyada bhi)</div><div class="hint">Phone ki badi photo auto-compress ho jayegi</div><input type="file" id="pf-images" accept="image/*" multiple class="hidden"></label>
+        </div>
+        <div class="field"><label class="lbl">Homepage par Featured?</label>
+          <label class="toggle"><input type="checkbox" id="pf-featured"><span class="track"></span></label>
+        </div>
+        <div class="field"><label class="lbl">Website par dikhega? (Active)</label>
+          <label class="toggle"><input type="checkbox" id="pf-active" checked><span class="track"></span></label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" onclick="closeModal('productModal')">Cancel</button>
+      <button class="btn btn-gold" id="prodSaveBtn"><i class="fa-solid fa-floppy-disk"></i> Save Product</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== CATEGORY MODAL ==================== -->
+<div class="modal-backdrop" id="categoryModal">
+  <div class="modal" style="max-width:480px;">
+    <div class="modal-head"><h3 id="catModalTitle">Nayi Category</h3><button class="modal-x" onclick="closeModal('categoryModal')"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <div class="field" style="margin-bottom:14px;"><label class="lbl">Category Ka Naam *</label><input id="cf-name" placeholder="Jhula"></div>
+      <div class="field" style="margin-bottom:14px;"><label class="lbl">Photo</label>
+        <div class="img-preview-row" id="cfImgPrev"></div>
+        <label class="upload-box" style="padding:14px;"><i class="fa-solid fa-cloud-arrow-up"></i> Photo chunein<input type="file" id="cf-image" accept="image/*" class="hidden"></label>
+      </div>
+      <div class="form-grid">
+        <div class="field"><label class="lbl">Kram (sort order)</label><input id="cf-sort" type="number" value="0"></div>
+        <div class="field"><label class="lbl">Website par dikhegi?</label><label class="toggle"><input type="checkbox" id="cf-active" checked><span class="track"></span></label></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" onclick="closeModal('categoryModal')">Cancel</button>
+      <button class="btn btn-gold" id="catSaveBtn"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+    </div>
+  </div>
+</div>
+
+<div id="loader"><div class="spinner"></div></div>
+<div id="toast"></div>
+
+<script>
+/* ==========================================================================
+   DEVWOOD DEKOR — ADMIN PANEL LOGIC
+   ========================================================================== */
+(function(){
+"use strict";
+const DB = window.DevwoodDB;
+const $ = (id) => document.getElementById(id);
+
+let PRODUCTS = [], CATEGORIES = [], SETTINGS = {};
+let editingProductId = null, editingCategoryId = null;
+let prodImages = [];   // {url} ya {file}
+let catImage = null;   // {url} ya {file}
+let heroImgFile = null, aboutImgFile = null;
+
+// ---------- helpers ----------
+function toast(msg, isErr){
+  const t = $("toast");
+  t.textContent = msg;
+  t.className = isErr ? "err" : "";
+  requestAnimationFrame(()=>t.classList.add("show"));
+  clearTimeout(t._tm);
+  t._tm = setTimeout(()=>t.classList.remove("show"), 2800);
+}
+function loading(on){ $("loader").classList.toggle("show", !!on); }
+function openModal(id){ $(id).classList.add("open"); }
+function closeModal(id){ $(id).classList.remove("open"); }
+window.closeModal = closeModal;
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g, function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
+function inr(n){ return "₹" + Number(n||0).toLocaleString("en-IN"); }
+document.querySelectorAll(".modal-backdrop").forEach(function(m){
+  m.addEventListener("click", function(e){ if(e.target===m) m.classList.remove("open"); });
+});
+function previewURL(item){
+  if(item.url) return item.url;
+  if(item.file){ if(!item._obj) item._obj = URL.createObjectURL(item.file); return item._obj; }
+  return "";
+}
+
+// ---------- navigation ----------
+const TITLES = { dashboard:"Dashboard", products:"Products", categories:"Categories", settings:"Settings" };
+function showPage(name){
+  document.querySelectorAll('.s-nav button[data-page]').forEach(function(b){ b.classList.toggle("active", b.dataset.page===name); });
+  document.querySelectorAll(".page").forEach(function(p){ p.classList.remove("active"); });
+  $("page-"+name).classList.add("active");
+  $("pageTitle").textContent = TITLES[name]||name;
+  $("sidebar").classList.remove("open");
+  if(name==="dashboard") renderDashboard();
+  if(name==="products") renderProducts();
+  if(name==="categories") renderCategories();
+}
+window.showPage = showPage;
+document.querySelectorAll('.s-nav button[data-page]').forEach(function(b){ b.addEventListener("click", function(){ showPage(b.dataset.page); }); });
+$("menuBtn").addEventListener("click", function(){ $("sidebar").classList.toggle("open"); });
+
+// ---------- login / boot ----------
+$("loginForm").addEventListener("submit", async function(e){
+  e.preventDefault();
+  const err = $("loginErr"); err.style.display="none";
+  const btn = $("loginBtn"); btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Login ho raha hai...';
+  try{
+    const user = await DB.signIn($("loginEmail").value.trim(), $("loginPass").value);
+    toast("Welcome! Login safal hua.");
+    enterApp(user);
+  }catch(ex){
+    err.textContent = "Login fail: " + (ex.message || "email/password galat hai");
+    err.style.display = "block";
+  }finally{
+    btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Login';
+  }
+});
+$("logoutBtn").addEventListener("click", async function(){
+  await DB.signOut(); location.reload();
+});
+
+(async function boot(){
+  loading(true);
+  try{
+    const user = await DB.currentUser();
+    if(user){ enterApp(user); }
+    else { $("loginView").style.display = "block"; }
+  }catch(ex){
+    $("loginView").style.display = "block";
+    const err = $("loginErr");
+    err.textContent = ex.message || "Supabase connect nahi hua";
+    err.style.display = "block";
+  }finally{ loading(false); }
+})();
+
+async function enterApp(user){
+  $("loginView").style.display = "none";
+  $("appView").classList.remove("hidden");
+  $("adminEmailLine").textContent = user.email || "";
+  loading(true);
+  try{
+    const res = await Promise.all([DB.getSettings(), DB.getCategories(false), DB.getProducts(false)]);
+    SETTINGS = res[0]; CATEGORIES = res[1]; PRODUCTS = res[2];
+    fillCategorySelects();
+    renderDashboard(); renderProducts(); renderCategories(); fillSettingsForm();
+  }catch(ex){ toast("Data load fail: " + ex.message, true); }
+  finally{ loading(false); }
+}
+async function refreshData(){
+  const res = await Promise.all([DB.getCategories(false), DB.getProducts(false)]);
+  CATEGORIES = res[0]; PRODUCTS = res[1];
+  fillCategorySelects();
+}
+
+// ---------- dashboard ----------
+function renderDashboard(){
+  const active = PRODUCTS.filter(function(p){ return p.is_active; });
+  const stats = [
+    {icon:"fa-couch", bg:"#f7ecd2", color:"#a8821f", num:PRODUCTS.length, lab:"Total Products"},
+    {icon:"fa-eye", bg:"#e5f6ec", color:"#1e8e4d", num:active.length, lab:"Website par Live"},
+    {icon:"fa-layer-group", bg:"#e8eefb", color:"#2563eb", num:CATEGORIES.length, lab:"Categories"},
+    {icon:"fa-star", bg:"#f7ecd2", color:"#a8821f", num:PRODUCTS.filter(function(p){return p.is_featured;}).length, lab:"Featured"},
+  ];
+  $("statGrid").innerHTML = stats.map(function(s){
+    return '<div class="stat-card"><div class="ic" style="background:'+s.bg+';color:'+s.color+'"><i class="fa-solid '+s.icon+'"></i></div>'+
+      '<div><div class="num">'+s.num+'</div><div class="lab">'+s.lab+'</div></div></div>';
+  }).join("");
+  const recent = PRODUCTS.slice(0,5);
+  $("recentTbl").innerHTML = recent.length ? recent.map(function(p){
+    return "<tr><td><img class='p-thumb' src='"+esc(p.image)+"' onerror=\"this.style.visibility='hidden'\"></td>"+
+      "<td><b>"+esc(p.name)+"</b><br><span style='color:var(--muted);font-size:.78rem;'>"+esc(p.categoryName)+"</span></td>"+
+      "<td>"+inr(p.price)+"</td>"+
+      "<td>"+(p.is_active?'<span class="pill green">Live</span>':'<span class="pill grey">Hidden</span>')+"</td>"+
+      "<td style='text-align:right;'><button class='icon-btn' onclick=\"openProductModal('"+p.id+"')\"><i class='fa-solid fa-pen'></i></button></td></tr>";
+  }).join("") : "<tr><td colspan='5'><div class='empty-box'><i class='fa-solid fa-couch'></i><h3>Abhi koi product nahi</h3><p>Add Product dabakar pehla product dalein.</p></div></td></tr>";
+}
+
+// ---------- products ----------
+function fillCategorySelects(){
+  const opts = CATEGORIES.map(function(c){
+    return '<option value="'+c.id+'">'+esc(c.name)+'</option>';
+  }).join("");
+  $("pf-category").innerHTML = '<option value="">— Category chunein —</option>' + opts;
+  const f = $("prodCatFilter");
+  const cur = f.value;
+  f.innerHTML = '<option value="">Sab Categories</option>' + opts;
+  f.value = cur;
+}
+
+function filteredProducts(){
+  const q = $("prodSearch").value.trim().toLowerCase();
+  const cat = $("prodCatFilter").value;
+  return PRODUCTS.filter(function(p){
+    const okQ = !q || p.name.toLowerCase().includes(q) || (p.description||"").toLowerCase().includes(q);
+    const okC = !cat || p.category_id === cat;
+    return okQ && okC;
+  });
+}
+
+function renderProducts(){
+  const list = filteredProducts();
+  $("prodCount").textContent = list.length + " / " + PRODUCTS.length;
+  $("prodEmpty").classList.toggle("hidden", list.length > 0);
+  $("prodTbl").innerHTML = list.map(function(p){
+    return "<tr>"+
+      "<td><img class='p-thumb' src='"+esc(p.image)+"' onerror=\"this.style.visibility='hidden'\"></td>"+
+      "<td><b>"+esc(p.name)+"</b>"+(p.badge?"<br><span class='pill gold' style='margin-top:4px;'>"+esc(p.badge)+"</span>":"")+"</td>"+
+      "<td>"+esc(p.categoryName)+"</td>"+
+      "<td><b>"+inr(p.price)+"</b>"+(p.mrp?"<br><s style='color:var(--muted);font-size:.78rem;'>"+inr(p.mrp)+"</s>":"")+"</td>"+
+      "<td><button class='icon-btn' title='Featured toggle' onclick=\"toggleFeatured('"+p.id+"')\" style='"+(p.is_featured?"color:var(--gold-600);border-color:var(--gold-500);":"")+"'><i class='fa-solid fa-star'></i></button></td>"+
+      "<td><label class='toggle'><input type='checkbox' "+(p.is_active?"checked":"")+" onchange=\"toggleActive('"+p.id+"',this.checked)\"><span class='track'></span></label></td>"+
+      "<td><div class='row-actions'>"+
+        "<button class='icon-btn' title='Edit' onclick=\"openProductModal('"+p.id+"')\"><i class='fa-solid fa-pen'></i></button>"+
+        "<button class='icon-btn danger' title='Delete' onclick=\"deleteProduct('"+p.id+"','"+esc(p.name).replace(/'/g,"")+"')\"><i class='fa-solid fa-trash'></i></button>"+
+      "</div></td></tr>";
+  }).join("");
+}
+$("prodSearch").addEventListener("input", renderProducts);
+$("prodCatFilter").addEventListener("change", renderProducts);
+
+window.toggleFeatured = async function(id){
+  const p = PRODUCTS.find(function(x){ return x.id===id; });
+  if(!p) return;
+  try{ await DB.saveProduct({ id:id, is_featured:!p.is_featured }); p.is_featured = !p.is_featured; renderProducts(); renderDashboard(); }
+  catch(ex){ toast("Fail: "+ex.message, true); }
+};
+window.toggleActive = async function(id, on){
+  const p = PRODUCTS.find(function(x){ return x.id===id; });
+  if(!p) return;
+  try{ await DB.saveProduct({ id:id, is_active:on }); p.is_active = on; renderDashboard(); toast(on?"Product website par dikhega":"Product chhupa diya"); }
+  catch(ex){ toast("Fail: "+ex.message, true); renderProducts(); }
+};
+window.deleteProduct = async function(id, name){
+  if(!confirm('Pakka delete karna hai?\n"'+name+'"\nYe wapas nahi aayega.')) return;
+  loading(true);
+  try{ await DB.deleteProduct(id); await refreshData(); renderProducts(); renderDashboard(); toast("Product delete ho gaya"); }
+  catch(ex){ toast("Delete fail: "+ex.message, true); }
+  finally{ loading(false); }
+};
+
+// ----- product modal -----
+function renderProdImgPrev(){
+  $("pfImgPrev").innerHTML = prodImages.map(function(it, i){
+    return '<div class="img-prev'+(i===0?" main":"")+'"><img src="'+esc(previewURL(it))+'">'+
+      '<button class="rm" onclick="removeProdImg('+i+')"><i class="fa-solid fa-xmark"></i></button>'+
+      (i===0?'<div class="tag">MAIN</div>':"")+'</div>';
+  }).join("");
+}
+window.removeProdImg = function(i){ prodImages.splice(i,1); renderProdImgPrev(); };
+$("pf-images").addEventListener("change", function(e){
+  Array.from(e.target.files).forEach(function(f){ prodImages.push({file:f}); });
+  e.target.value = ""; renderProdImgPrev();
+});
+
+window.openProductModal = function(id){
+  editingProductId = id || null;
+  prodImages = [];
+  if(id){
+    const p = PRODUCTS.find(function(x){ return x.id===id; });
+    if(!p) return;
+    $("prodModalTitle").textContent = "Product Edit Karein";
+    $("pf-name").value = p.name || "";
+    $("pf-category").value = p.category_id || "";
+    $("pf-badge").value = p.badge || "";
+    $("pf-price").value = p.price || "";
+    $("pf-mrp").value = p.mrp || "";
+    $("pf-wood").value = p.woodType || "";
+    $("pf-finish").value = p.finish || "";
+    $("pf-dims").value = p.dimensions || "";
+    $("pf-desc").value = p.description || "";
+    $("pf-featured").checked = !!p.is_featured;
+    $("pf-active").checked = p.is_active !== false;
+    prodImages = (p.images||[]).map(function(u){ return {url:u}; });
+  } else {
+    $("prodModalTitle").textContent = "Naya Product";
+    ["pf-name","pf-badge","pf-price","pf-mrp","pf-wood","pf-finish","pf-dims","pf-desc"].forEach(function(k){ $(k).value=""; });
+    $("pf-category").value = "";
+    $("pf-featured").checked = false;
+    $("pf-active").checked = true;
+  }
+  renderProdImgPrev();
+  openModal("productModal");
+};
+
+$("prodSaveBtn").addEventListener("click", async function(){
+  const name = $("pf-name").value.trim();
+  const category_id = $("pf-category").value;
+  const price = $("pf-price").value;
+  if(!name){ toast("Product ka naam likhna zaroori hai", true); return; }
+  if(!category_id){ toast("Category chunna zaroori hai", true); return; }
+  if(price === "" || Number(price) < 0){ toast("Sahi price dalein", true); return; }
+  if(prodImages.length === 0){ toast("Kam se kam 1 photo lagana zaroori hai", true); return; }
+
+  const btn = $("prodSaveBtn"); btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Save ho raha hai...';
+  loading(true);
+  try{
+    // nayi photos upload karo
+    const urls = [];
+    for(const it of prodImages){
+      if(it.url) urls.push(it.url);
+      else urls.push(await DB.uploadImage(it.file, "products"));
     }
-    function closeChangePasswordModal() {
-      const modal = document.getElementById("changePasswordModal");
-      if (modal) modal.classList.remove("active");
+    const cat = CATEGORIES.find(function(c){ return c.id===category_id; });
+    await DB.saveProduct({
+      id: editingProductId,
+      name:name, category_id:category_id,
+      price:price, mrp:$("pf-mrp").value,
+      badge:$("pf-badge").value.trim(),
+      wood_type:$("pf-wood").value.trim(),
+      dimensions:$("pf-dims").value.trim(),
+      finish:$("pf-finish").value.trim(),
+      description:$("pf-desc").value.trim(),
+      images:urls,
+      is_featured:$("pf-featured").checked,
+      is_active:$("pf-active").checked,
+      _cat: cat ? {id:cat.id, name:cat.name, slug:cat.slug} : null,
+    });
+    await refreshData(); renderProducts(); renderDashboard();
+    closeModal("productModal");
+    toast(editingProductId ? "Product update ho gaya" : "Naya product add ho gaya!");
+  }catch(ex){ toast("Save fail: "+ex.message, true); }
+  finally{ loading(false); btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Product'; }
+});
+
+// ---------- categories ----------
+function renderCategories(){
+  const grid = $("catGrid");
+  if(!CATEGORIES.length){
+    grid.innerHTML = '<div class="empty-box"><i class="fa-solid fa-layer-group"></i><h3>Koi category nahi</h3><p>Add Category dabakar pehli category banayein.</p></div>';
+    return;
+  }
+  grid.innerHTML = CATEGORIES.map(function(c){
+    const count = PRODUCTS.filter(function(p){ return p.category_id===c.id; }).length;
+    return '<div class="cat-card">'+
+      (c.image_url ? '<img src="'+esc(c.image_url)+'">' : '<div style="width:64px;height:64px;border-radius:12px;background:var(--gold-100);display:flex;align-items:center;justify-content:center;color:var(--gold-600);font-size:1.5rem;"><i class="fa-solid fa-image"></i></div>')+
+      '<div style="flex:1;"><div class="nm">'+esc(c.name)+'</div><div class="sl">'+count+' products • '+(c.is_active?"Live":"Hidden")+'</div></div>'+
+      '<div class="row-actions">'+
+        '<button class="icon-btn" onclick="openCategoryModal(\''+c.id+'\')"><i class="fa-solid fa-pen"></i></button>'+
+        '<button class="icon-btn danger" onclick="deleteCategory(\''+c.id+'\',\''+esc(c.name).replace(/'/g,"")+'\')"><i class="fa-solid fa-trash"></i></button>'+
+      '</div></div>';
+  }).join("");
+}
+function renderCatImgPrev(){
+  $("cfImgPrev").innerHTML = catImage
+    ? '<div class="img-prev main"><img src="'+esc(previewURL(catImage))+'"><button class="rm" onclick="clearCatImg()"><i class="fa-solid fa-xmark"></i></button><div class="tag">PHOTO</div></div>'
+    : "";
+}
+window.clearCatImg = function(){ catImage = null; renderCatImgPrev(); };
+$("cf-image").addEventListener("change", function(e){
+  if(e.target.files[0]) catImage = {file:e.target.files[0]};
+  e.target.value=""; renderCatImgPrev();
+});
+
+window.openCategoryModal = function(id){
+  editingCategoryId = id || null;
+  catImage = null;
+  if(id){
+    const c = CATEGORIES.find(function(x){ return x.id===id; });
+    if(!c) return;
+    $("catModalTitle").textContent = "Category Edit Karein";
+    $("cf-name").value = c.name;
+    $("cf-sort").value = c.sort_order || 0;
+    $("cf-active").checked = c.is_active !== false;
+    if(c.image_url) catImage = {url:c.image_url};
+  } else {
+    $("catModalTitle").textContent = "Nayi Category";
+    $("cf-name").value = ""; $("cf-sort").value = 0; $("cf-active").checked = true;
+  }
+  renderCatImgPrev();
+  openModal("categoryModal");
+};
+
+$("catSaveBtn").addEventListener("click", async function(){
+  const name = $("cf-name").value.trim();
+  if(!name){ toast("Category ka naam zaroori hai", true); return; }
+  const btn = $("catSaveBtn"); btn.disabled = true; loading(true);
+  try{
+    let image_url = catImage && catImage.url ? catImage.url : null;
+    if(catImage && catImage.file) image_url = await DB.uploadImage(catImage.file, "categories");
+    let slug = DB.slugify(name);
+    if(editingCategoryId){
+      const old = CATEGORIES.find(function(c){ return c.id===editingCategoryId; });
+      slug = old ? old.slug : slug;
+    } else {
+      let n = 1, base = slug;
+      while(CATEGORIES.some(function(c){ return c.slug===slug; })){ slug = base + "-" + (++n); }
     }
-    async function handleChangePasswordSubmit(e) {
-      e.preventDefault();
-      const p1 = document.getElementById("newAdminPasswordInput").value.trim();
-      const p2 = document.getElementById("confirmAdminPasswordInput").value.trim();
-      if (!p1 || p1.length < 4) {
-        showToast("Password kam se kam 4 akshar ka hona chahiye!");
-        return;
-      }
-      if (p1 !== p2) {
-        showToast("Dono password match nahi hue! Dobara check karein.");
-        return;
-      }
-      const success = await changeAdminPassword(p1);
-      if (success) {
-        closeChangePasswordModal();
-      }
-    }
-  </script>
+    await DB.saveCategory({
+      id: editingCategoryId, name:name, slug:slug, image_url:image_url,
+      sort_order:$("cf-sort").value, is_active:$("cf-active").checked,
+    });
+    await refreshData(); renderCategories(); renderDashboard();
+    closeModal("categoryModal");
+    toast("Category save ho gayi");
+  }catch(ex){ toast("Save fail: "+ex.message, true); }
+  finally{ loading(false); btn.disabled = false; }
+});
+
+window.deleteCategory = async function(id, name){
+  const count = PRODUCTS.filter(function(p){ return p.category_id===id; }).length;
+  if(!confirm('Pakka delete karna hai?\n"'+name+'"\nIsme '+count+' products hain — wo "bina category" ke ho jayenge.')) return;
+  loading(true);
+  try{ await DB.deleteCategory(id); await refreshData(); renderCategories(); renderDashboard(); toast("Category delete ho gayi"); }
+  catch(ex){ toast("Delete fail: "+ex.message, true); }
+  finally{ loading(false); }
+};
+
+// ---------- settings ----------
+const SETTING_KEYS = ["site_name","tagline","phone","whatsapp","address","map_url","announcement",
+  "hero_badge","hero_title","hero_subtitle","about_title","about_text",
+  "facebook","instagram","youtube","footer_text"];
+
+function fillSettingsForm(){
+  SETTING_KEYS.forEach(function(k){ const el = $("set-"+k); if(el) el.value = SETTINGS[k] || ""; });
+  renderSetImg("heroImgPrev", SETTINGS.hero_image, "hero");
+  renderSetImg("aboutImgPrev", SETTINGS.about_image, "about");
+}
+function renderSetImg(elId, url, which){
+  const has = url || (which==="hero" ? heroImgFile : aboutImgFile);
+  $(elId).innerHTML = has
+    ? '<div class="img-prev main"><img src="'+esc(which==="hero"?(heroImgFile?previewURL({file:heroImgFile}):url):(aboutImgFile?previewURL({file:aboutImgFile}):url))+'"><button class="rm" onclick="clearSetImg(\''+which+'\')"><i class="fa-solid fa-xmark"></i></button><div class="tag">PHOTO</div></div>'
+    : "";
+}
+window.clearSetImg = function(which){
+  if(which==="hero"){ heroImgFile = null; SETTINGS.hero_image = ""; }
+  else { aboutImgFile = null; SETTINGS.about_image = ""; }
+  fillSettingsForm();
+};
+$("heroImgInput").addEventListener("change", function(e){ if(e.target.files[0]){ heroImgFile = e.target.files[0]; renderSetImg("heroImgPrev", null, "hero"); } e.target.value=""; });
+$("aboutImgInput").addEventListener("change", function(e){ if(e.target.files[0]){ aboutImgFile = e.target.files[0]; renderSetImg("aboutImgPrev", null, "about"); } e.target.value=""; });
+
+$("saveSettingsBtn").addEventListener("click", async function(){
+  const btn = $("saveSettingsBtn"); btn.disabled = true; loading(true);
+  try{
+    const obj = {};
+    SETTING_KEYS.forEach(function(k){ const el = $("set-"+k); obj[k] = el ? el.value.trim() : ""; });
+    if(heroImgFile) obj.hero_image = await DB.uploadImage(heroImgFile, "settings");
+    else obj.hero_image = SETTINGS.hero_image || "";
+    if(aboutImgFile) obj.about_image = await DB.uploadImage(aboutImgFile, "settings");
+    else obj.about_image = SETTINGS.about_image || "";
+    await DB.saveSettings(obj);
+    SETTINGS = Object.assign({}, SETTINGS, obj);
+    heroImgFile = null; aboutImgFile = null;
+    fillSettingsForm();
+    toast("Settings save ho gayi — website par turant dikhegi");
+  }catch(ex){ toast("Save fail: "+ex.message, true); }
+  finally{ loading(false); btn.disabled = false; }
+});
+
+})();
+</script>
 </body>
-
 </html>
