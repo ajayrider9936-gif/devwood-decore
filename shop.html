@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop Sheesham Furniture & Rajasthani Antiques | Devwood Dekor Sardarshahar</title>
+  <meta name="description" content="Explore Devwood Dekor's exclusive catalog of solid Sheesham wood furniture, royal king beds, dining suites, vintage Jharokhas, brass artefacts, and antique chests. Delivery from Sardarshahar across India. Call: 9783656009.">
+  <meta name="keywords" content="buy Sheesham furniture online, royal dining sets India, Maharaja king beds, antique jharokha price, wooden mandir online, Sardarshahar furniture">
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪑</text></svg>">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="announcement-bar">
+    <div class="container announcement-content">
+      <div class="announcement-item">
+        <i class="fa-solid fa-location-dot"></i>
+        <span>Showroom: Taranagar Road, 1 KM from Sardarshahar Circle, Sardarshahar, Rajasthan</span>
+      </div>
+      <div class="announcement-item">
+        <i class="fa-solid fa-phone"></i>
+        <span>Helpline: <a href="tel:9783656009" class="announcement-link">9783656009</a></span>
+        <span style="margin: 0 8px; color: var(--gold-500);">|</span>
+        <i class="fa-brands fa-whatsapp" style="color: #25d366;"></i>
+        <a href="https://wa.me/919783656009" target="_blank" class="announcement-link">WhatsApp Order</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <i class="fa-solid fa-crown"></i>
+        </div>
+        <div class="brand-text-wrap">
+          <span class="brand-title">DEVWOOD <span>DEKOR</span></span>
+          <span class="brand-tagline">ROYAL WOODCRAFT & ANTIQUES</span>
+        </div>
+      </a>
+
+      <nav class="desktop-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="shop.html" class="nav-link active">Shop Collection</a>
+        <a href="about.html" class="nav-link">Heritage & Artisans</a>
+        <a href="contact.html" class="nav-link">Contact & Location</a>
+      </nav>
+
+      <div class="header-actions">
+        <button onclick="openAddProductModal()" class="btn btn-gold admin-only" style="padding: 8px 16px; font-size: 0.85rem; display: none;" title="Apna Naya Product Add Karein">
+          <i class="fa-solid fa-plus-circle"></i> <span>+ Naya Product Dalein</span>
+        </button>
+
+        
+
+        <button class="btn btn-outline admin-logout-btn" onclick="logoutAdmin()" style="padding: 8px 16px; font-size: 0.85rem; display: none;" title="Admin Logout">
+          <i class="fa-solid fa-sign-out-alt"></i> <span>Logout</span>
+        </button>
+
+        <a href="admin.html" class="btn btn-outline admin-panel-link" style="padding: 8px 16px; font-size: 0.85rem; display: none; align-items: center; gap: 6px;" title="Admin Panel">
+          <i class="fa-solid fa-gauge"></i> <span>Admin Panel</span>
+        </a>
+
+        <a href="https://wa.me/919783656009" target="_blank" class="whatsapp-direct-btn">
+          <i class="fa-brands fa-whatsapp"></i>
+          <span>Chat 9783656009</span>
+        </a>
+
+        <button class="action-btn" onclick="openCartDrawer()" title="View Cart">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <span class="badge-count cart-count-badge" style="display: none;">0</span>
+        </button>
+
+        <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" title="Toggle Navigation">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-nav-drawer" id="mobileNavDrawer">
+    <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+      <div class="brand-title" style="color: #fff; font-size: 1.3rem;">DEVWOOD <span>DEKOR</span></div>
+      <button onclick="toggleMobileMenu()" style="background: transparent; color: #fff; font-size: 1.4rem;">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <ul class="mobile-nav-links">
+      <li><a href="index.html"><i class="fa-solid fa-house"></i> Home</a></li>
+      <li><a href="shop.html" class="active"><i class="fa-solid fa-couch"></i> Shop Collection</a></li>
+      <li><a href="about.html"><i class="fa-solid fa-feather-pointed"></i> Heritage & Artisans</a></li>
+      <li><a href="contact.html"><i class="fa-solid fa-location-dot"></i> Contact & Location</a></li>
+      <li class="admin-only" style="margin-top: 15px; display: none;">
+        <button onclick="goToAdminPanel(); toggleMobileMenu();" class="btn btn-gold" style="width: 100%; font-size: 0.9rem;">
+          <i class="fa-solid fa-plus-circle"></i> + Naya Product Dalein
+        </button>
+      </li>
+      
+      <li class="admin-logout-btn" style="margin-top: 15px; display: none;">
+        <button onclick="logoutAdmin(); toggleMobileMenu();" class="btn btn-outline" style="width: 100%; font-size: 0.9rem; color: var(--cream-200); border-color: var(--cream-200);">
+          <i class="fa-solid fa-sign-out-alt"></i> Admin Logout
+        </button>
+      </li>
+      <li style="margin-top: 15px;">
+        <a href="tel:9783656009" style="color: var(--gold-400);"><i class="fa-solid fa-phone"></i> Call: 9783656009</a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Page Hero Header -->
+  <div class="page-hero-header">
+    <div class="container">
+      <h1 class="page-hero-title">Exclusive Furniture & Antique Catalog</h1>
+      <div class="breadcrumbs">
+        <a href="index.html">Home</a>
+        <span>/</span>
+        <span>Shop Collection</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shop Controls & Product Grid Section -->
+  <section class="products-section" style="padding: 60px 0 90px 0;">
+    <div class="container">
+      
+      <!-- Visual Category Cards Strip -->
+      <div class="shop-category-strip">
+        <button class="shop-cat-card" onclick="selectShopCategory('all')" title="All Masterpieces">
+          <div style="font-size: 1.6rem; color: var(--gold-500); margin-bottom: 6px;"><i class="fa-solid fa-crown"></i></div>
+          <span>All Items</span>
+        </button>
+        <button class="shop-cat-card" onclick="selectShopCategory('living')" title="Living Room & Sofa">
+          <div style="font-size: 1.6rem; color: var(--gold-500); margin-bottom: 6px;"><i class="fa-solid fa-couch"></i></div>
+          <span>Sofa & Living</span>
+        </button>
+        <button class="shop-cat-card" onclick="selectShopCategory('dining')" title="Dining Suites">
+          <div style="font-size: 1.6rem; color: var(--gold-500); margin-bottom: 6px;"><i class="fa-solid fa-utensils"></i></div>
+          <span>Dining Sets</span>
+        </button>
+        <button class="shop-cat-card" onclick="selectShopCategory('bedroom')" title="Maharaja Beds">
+          <div style="font-size: 1.6rem; color: var(--gold-500); margin-bottom: 6px;"><i class="fa-solid fa-bed"></i></div>
+          <span>Beds & Bedroom</span>
+        </button>
+        <button class="shop-cat-card" onclick="selectShopCategory('mandir')" title="Wooden Mandir">
+          <div style="font-size: 1.6rem; color: var(--gold-500); margin-bottom: 6px;"><i class="fa-solid fa-place-of-worship"></i></div>
+          <span>Pooja Mandir</span>
+        </button>
+        <button class="shop-cat-card" onclick="selectShopCategory('tables')" title="Center & Coffee Tables">
+          <div style="font-size: 1.6rem; color: var(--gold-500); margin-bottom: 6px;"><i class="fa-solid fa-table"></i></div>
+          <span>Center Tables</span>
+        </button>
+        <button class="shop-cat-card" onclick="selectShopCategory('storage')" title="Almirah & Storage">
+          <div style="font-size: 1.6rem; color: var(--gold-500); margin-bottom: 6px;"><i class="fa-solid fa-warehouse"></i></div>
+          <span>Almirah & Storage</span>
+        </button>
+        <button class="shop-cat-card" onclick="selectShopCategory('wall-decor')" title="Jharokhas & Wall Decor">
+          <div style="font-size: 1.6rem; color: var(--gold-500); margin-bottom: 6px;"><i class="fa-solid fa-archway"></i></div>
+          <span>Wall Jharokhas</span>
+        </button>
+        <button class="shop-cat-card" onclick="selectShopCategory('antiques')" title="Antique Chests & Artefacts">
+          <div style="font-size: 1.6rem; color: var(--gold-500); margin-bottom: 6px;"><i class="fa-solid fa-box-archive"></i></div>
+          <span>Haveli Antiques</span>
+        </button>
+        <button class="shop-cat-card" onclick="selectShopCategory('office')" title="Study & Office Desks">
+          <div style="font-size: 1.6rem; color: var(--gold-500); margin-bottom: 6px;"><i class="fa-solid fa-briefcase"></i></div>
+          <span>Study & Office</span>
+        </button>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="filter-tabs">
+        <button class="filter-tab shop-filter-btn active" data-filter="all">All Masterpieces</button>
+        <button class="filter-tab shop-filter-btn" data-filter="living">Sofa & Living</button>
+        <button class="filter-tab shop-filter-btn" data-filter="dining">Dining Sets</button>
+        <button class="filter-tab shop-filter-btn" data-filter="bedroom">Beds & Bedroom</button>
+        <button class="filter-tab shop-filter-btn" data-filter="mandir">Pooja Mandir</button>
+        <button class="filter-tab shop-filter-btn" data-filter="tables">Center Tables</button>
+        <button class="filter-tab shop-filter-btn" data-filter="storage">Almirah & Storage</button>
+        <button class="filter-tab shop-filter-btn" data-filter="wall-decor">Jharokhas & Wall Art</button>
+        <button class="filter-tab shop-filter-btn" data-filter="antiques">Rare Antiques</button>
+        <button class="filter-tab shop-filter-btn" data-filter="office">Study & Office</button>
+      </div>
+
+      <!-- Search & Sort Bar -->
+      <div class="shop-controls-bar">
+        <div class="search-input-wrapper">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="shopSearchInput" class="shop-search-input" placeholder="Search solid sheesham, bed, dining, antique jharokha, mandir...">
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+          <button onclick="openAddProductModal()" class="btn btn-primary admin-only" style="padding: 10px 18px; font-size: 0.88rem; display: none;">
+            <i class="fa-solid fa-plus"></i> + Naya Product Dalein
+          </button>
+
+          
+
+          <span id="shopResultsCount" style="font-size: 0.9rem; font-weight: 600; color: var(--muted-text);">
+            Showing creations
+          </span>
+
+          <select id="shopSortSelect" class="sort-select">
+            <option value="default">Sort: Recommended</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="rating">Highest Rated</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Dynamic Product Grid -->
+      <div class="products-grid" id="shopProductsGrid">
+        <!-- Injected via main.js -->
+      </div>
+
+      <!-- Customization & Bespoke Order Banner -->
+      <div style="background: linear-gradient(135deg, var(--wood-800) 0%, var(--wood-900) 100%); border-radius: 14px; padding: 45px; margin-top: 70px; color: #fff; border: 1px solid var(--border-gold); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 30px;">
+        <div style="max-width: 650px;">
+          <span style="font-family: var(--font-royal); font-size: 0.85rem; color: var(--gold-400); letter-spacing: 2px; text-transform: uppercase;">Bespoke Commissioning</span>
+          <h3 style="font-family: var(--font-serif); font-size: 2rem; margin: 8px 0 12px 0;">Need Custom Sizing or Antique Restoration?</h3>
+          <p style="color: var(--cream-200); font-size: 0.95rem; line-height: 1.6;">
+            Have a specific interior plan, room dimension, or ancestral wooden piece to restore? Our Sardarshahar master woodworkers build made-to-order furniture with your preferred polish and dimensions.
+          </p>
+        </div>
+        <div>
+          <a href="https://wa.me/919783656009?text=Hello%20Devwood%20Dekor,%20I%20want%20custom%20made%20furniture%20or%20antique%20restoration." target="_blank" class="btn btn-gold" style="padding: 14px 28px;">
+            <i class="fa-brands fa-whatsapp" style="font-size: 1.2rem;"></i>
+            <span>Send Custom Request (9783656009)</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Add Product Modal (Naya Product Dalne Ke Liye) -->
+  <div class="modal-backdrop" id="addProductModal">
+    <div class="modal-box" style="display: block; max-width: 650px; padding: 32px;">
+      <button class="modal-close-btn" onclick="closeAddProductModal()" title="Close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div style="margin-bottom: 20px;">
+        <span class="section-subtitle">Devwood Dekor Store</span>
+        <h3 style="font-family: var(--font-serif); font-size: 1.8rem; color: var(--wood-900);">
+          <i class="fa-solid fa-plus-circle" style="color: var(--gold-500);"></i> Naya Product Add Karein
+        </h3>
+        <p style="font-size: 0.88rem; color: var(--muted-text); margin-top: 4px;">
+          Naya product add karne ke liye details bharein aur apni mobile ya computer gallery se photo upload karein.
+        </p>
+      </div>
+
+      <form id="newProductForm" onsubmit="handleAddNewProduct(event)">
+        <div class="form-group">
+          <label class="form-label">Product Ka Naam *</label>
+          <input type="text" id="newProdName" class="form-control" placeholder="e.g. Royal Carved Center Table" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+          <div class="form-group">
+            <label class="form-label">Category *</label>
+            <select id="newProdCategory" class="form-control" required>
+              <option value="living">Living & Sofa (लिविंग रूम और सोफा)</option>
+              <option value="dining">Dining Sets (डाइनिंग टेबल व कुर्सियां)</option>
+              <option value="bedroom">Beds & Bedroom (पलंग और बेडरूम)</option>
+              <option value="mandir">Pooja Mandir (पूजा मंदिर)</option>
+              <option value="tables">Center & Coffee Tables (सेंटर / साइड टेबल)</option>
+              <option value="storage">Wardrobes & Storage (अलमारी / वॉर्डरोब)</option>
+              <option value="wall-decor">Jharokhas & Wall Decor (झरोखा / वॉल आर्ट)</option>
+              <option value="antiques">Rare Antiques & Brass (हवेली एंटीक्स / पीतल)</option>
+              <option value="office">Study & Office Desks (स्टडी व ऑफिस टेबल)</option>
+              <option value="furniture">Other Wooden Furniture (अन्य फर्नीचर)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Selling Price (₹) *</label>
+            <input type="number" id="newProdPrice" class="form-control" placeholder="e.g. 24000" required>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+          <div class="form-group">
+            <label class="form-label">Original Price (₹) - Cut Price</label>
+            <input type="number" id="newProdOldPrice" class="form-control" placeholder="e.g. 30000">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Wood / Material *</label>
+            <input type="text" id="newProdWood" class="form-control" placeholder="e.g. Solid Sheesham / Teak / Brass" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Dimensions (Size)</label>
+          <input type="text" id="newProdDimensions" class="form-control" placeholder="e.g. 48 L x 24 W x 18 H inch">
+        </div>
+
+        <!-- Gallery Photo Upload Area -->
+        <div class="form-group" style="margin: 16px 0;">
+          <label class="form-label" style="font-weight: 700; color: var(--wood-900); display: flex; align-items: center; justify-content: space-between;">
+            <span><i class="fa-solid fa-camera" style="color: var(--gold-500);"></i> Product Photo (Gallery se Upload Karein)</span>
+            <span style="font-size: 0.76rem; color: var(--gold-600); font-weight: normal;">* Mobile / PC Gallery</span>
+          </label>
+          
+          <div class="gallery-upload-box" id="galleryUploadBox" onclick="document.getElementById('newProdGalleryFile').click()" style="border: 2px dashed var(--gold-500); border-radius: 10px; padding: 22px; text-align: center; background: var(--cream-50); cursor: pointer; transition: all 0.25s ease;">
+            <input type="file" id="newProdGalleryFile" accept="image/*" style="display: none;" onchange="handleGalleryPhotoSelect(event)">
+            
+            <div id="galleryUploadPrompt">
+              <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2.2rem; color: var(--gold-600); margin-bottom: 8px;"></i>
+              <div style="font-weight: 700; color: var(--wood-900); font-size: 1rem;">Gallery se Photo Chunein</div>
+              <div style="font-size: 0.8rem; color: var(--muted-text); margin-top: 4px;">Click karein aur apni gallery ya files se photo select karein</div>
+            </div>
+
+            <div id="galleryUploadPreview" style="display: none; flex-direction: column; align-items: center; gap: 10px;">
+              <img id="galleryPreviewImg" src="" alt="Selected Photo" style="max-height: 180px; max-width: 100%; border-radius: 8px; border: 2px solid var(--gold-500); box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+              <button type="button" onclick="clearSelectedPhoto(event)" class="btn btn-outline" style="padding: 6px 14px; font-size: 0.8rem; border-color: #e74c3c; color: #e74c3c;">
+                <i class="fa-solid fa-trash"></i> Doosri Photo Chunein
+              </button>
+            </div>
+          </div>
+          <input type="hidden" id="newProdBase64" value="">
+
+          <div style="margin-top: 8px; text-align: right;">
+            <small style="color: var(--muted-text); font-size: 0.76rem;">Ya online link ho toh: </small>
+            <input type="text" id="newProdImage" class="form-control" placeholder="https://... link (optional)" style="display: inline-block; width: 62%; padding: 6px 10px; font-size: 0.82rem; margin-top: 4px;">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Description (Jaankari)</label>
+          <textarea id="newProdDesc" class="form-control" style="min-height: 80px;" placeholder="Product ki khasiyat, lakdi aur polish ke baare mein likhein..."></textarea>
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-top: 25px;">
+          <button type="submit" class="btn btn-gold" style="flex: 1; padding: 13px;">
+            <i class="fa-solid fa-check"></i> Save & Publish Product
+          </button>
+          <button type="button" onclick="closeAddProductModal()" class="btn btn-outline" style="padding: 13px 20px;">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <h3>DEVWOOD <span>DEKOR</span></h3>
+          <p>
+            Manufacturer and curator of royal Rajasthani Sheesham furniture and genuine antique artefacts in Sardarshahar.
+          </p>
+          <div class="footer-contact-list">
+            <div class="footer-contact-item">
+              <i class="fa-solid fa-location-dot"></i>
+              <span>Taranagar Road, 1 KM from Sardarshahar Circle, Sardarshahar, Rajasthan</span>
+            </div>
+            <div class="footer-contact-item">
+              <i class="fa-solid fa-phone"></i>
+              <span><a href="tel:9783656009" style="color: var(--gold-400); font-weight: 700;">+91 9783656009</a></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-column">
+          <h4>Furniture Categories</h4>
+          <ul class="footer-links">
+            <li><a href="shop.html">Living Room Sofas</a></li>
+            <li><a href="shop.html">Royal Dining Sets</a></li>
+            <li><a href="shop.html">Maharaja Beds</a></li>
+            <li><a href="shop.html">Jaali Wardrobes</a></li>
+            <li><a href="shop.html">Wooden Temple Mandir</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4>Antique Categories</h4>
+          <ul class="footer-links">
+            <li><a href="shop.html">Carved Jharokhas</a></li>
+            <li><a href="shop.html">Haveli Wooden Doors</a></li>
+            <li><a href="shop.html">Vintage Damchiya Chests</a></li>
+            <li><a href="shop.html">Brass Temple Lamps</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4>Showroom Timings</h4>
+          <p style="font-size: 0.9rem; color: var(--cream-200); line-height: 1.7;">
+            <strong>Monday – Sunday:</strong><br>
+            9:30 AM to 8:30 PM<br>
+            <em>Open all 7 days for visitors and buyers.</em>
+          </p>
+          <div style="margin-top: 15px;">
+            <a href="contact.html" class="btn btn-outline-gold" style="padding: 8px 18px; font-size: 0.85rem;">Get Directions</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 Devwood Dekor. All Rights Reserved.</div>
+        <div>Contact: 9783656009 | Sardarshahar, Rajasthan</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Slide-out Cart Drawer -->
+  <div class="cart-drawer-backdrop" id="cartBackdrop" onclick="closeCartDrawer()"></div>
+  <aside class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <h3><i class="fa-solid fa-bag-shopping"></i> Your Selected Items</h3>
+      <button class="close-cart-btn" onclick="closeCartDrawer()" title="Close Cart">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="cart-items-container" id="cartItemsList">
+      <!-- Items dynamically rendered by main.js -->
+    </div>
+    <div class="cart-footer">
+      <div class="cart-subtotal">
+        <span>Subtotal:</span>
+        <span id="cartSubtotalAmount">₹0</span>
+      </div>
+      <div class="cart-note">
+        <i class="fa-solid fa-truck"></i> Safe crating & all-India delivery calculated on confirmation.
+      </div>
+      <button class="btn-checkout-whatsapp" onclick="checkoutViaWhatsApp()">
+        <i class="fa-brands fa-whatsapp" style="font-size: 1.3rem;"></i>
+        <span>Confirm Order on WhatsApp</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Quick View Modal -->
+  <div class="modal-backdrop" id="quickViewModal">
+    <div class="modal-box">
+      <button class="modal-close-btn" onclick="closeQuickView()" title="Close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div id="quickViewContent" style="display: contents;">
+        <!-- Injected via main.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating WhatsApp Quick Button -->
+  <a href="https://wa.me/919783656009?text=Hello%20Devwood%20Dekor,%20I%20am%20interested%20in%20your%20furniture%20catalog." target="_blank" class="floating-whatsapp" title="Chat on WhatsApp (+91 9783656009)">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
+  <!-- JavaScript -->
+  <script src="main.js"></script>
+</body>
+</html>

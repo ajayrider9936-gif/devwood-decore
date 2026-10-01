@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us & Artisan Heritage | Devwood Dekor Sardarshahar Rajasthan</title>
+  <meta name="description" content="Discover the timeless story of Devwood Dekor in Sardarshahar, Rajasthan. Generations of master woodcraft karigars shaping solid Sheesham wood furniture and authentic Rajasthani antiques. Call: 9783656009.">
+  <meta name="keywords" content="Devwood Dekor history, Sardarshahar woodcraft heritage, Shekhawati artisans, Rajasthani furniture makers, handcrafted antiques restoration">
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪑</text></svg>">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="announcement-bar">
+    <div class="container announcement-content">
+      <div class="announcement-item">
+        <i class="fa-solid fa-location-dot"></i>
+        <span>Showroom: Taranagar Road, 1 KM from Sardarshahar Circle, Sardarshahar, Rajasthan</span>
+      </div>
+      <div class="announcement-item">
+        <i class="fa-solid fa-phone"></i>
+        <span>Helpline: <a href="tel:9783656009" class="announcement-link">9783656009</a></span>
+        <span style="margin: 0 8px; color: var(--gold-500);">|</span>
+        <i class="fa-brands fa-whatsapp" style="color: #25d366;"></i>
+        <a href="https://wa.me/919783656009" target="_blank" class="announcement-link">WhatsApp Us</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <i class="fa-solid fa-crown"></i>
+        </div>
+        <div class="brand-text-wrap">
+          <span class="brand-title">DEVWOOD <span>DEKOR</span></span>
+          <span class="brand-tagline">ROYAL WOODCRAFT & ANTIQUES</span>
+        </div>
+      </a>
+
+      <nav class="desktop-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="shop.html" class="nav-link">Shop Collection</a>
+        <a href="about.html" class="nav-link active">Heritage & Artisans</a>
+        <a href="contact.html" class="nav-link">Contact & Location</a>
+      </nav>
+
+      <div class="header-actions">
+        
+
+        <button class="btn btn-outline admin-logout-btn" onclick="logoutAdmin()" style="padding: 8px 16px; font-size: 0.85rem; display: none;" title="Admin Logout">
+          <i class="fa-solid fa-sign-out-alt"></i> <span>Logout</span>
+        </button>
+
+        <a href="admin.html" class="btn btn-outline admin-panel-link" style="padding: 8px 16px; font-size: 0.85rem; display: none; align-items: center; gap: 6px;" title="Admin Panel">
+          <i class="fa-solid fa-gauge"></i> <span>Admin Panel</span>
+        </a>
+
+        <a href="https://wa.me/919783656009" target="_blank" class="whatsapp-direct-btn">
+          <i class="fa-brands fa-whatsapp"></i>
+          <span>Chat 9783656009</span>
+        </a>
+
+        <button class="action-btn" onclick="openCartDrawer()" title="View Cart">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <span class="badge-count cart-count-badge" style="display: none;">0</span>
+        </button>
+
+        <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" title="Toggle Navigation">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-nav-drawer" id="mobileNavDrawer">
+    <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+      <div class="brand-title" style="color: #fff; font-size: 1.3rem;">DEVWOOD <span>DEKOR</span></div>
+      <button onclick="toggleMobileMenu()" style="background: transparent; color: #fff; font-size: 1.4rem;">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <ul class="mobile-nav-links">
+      <li><a href="index.html"><i class="fa-solid fa-house"></i> Home</a></li>
+      <li><a href="shop.html"><i class="fa-solid fa-couch"></i> Shop Collection</a></li>
+      <li><a href="about.html" class="active"><i class="fa-solid fa-feather-pointed"></i> Heritage & Artisans</a></li>
+      <li><a href="contact.html"><i class="fa-solid fa-location-dot"></i> Contact & Location</a></li>
+      <li class="admin-login-btn" style="margin-top: 20px;">
+        <button onclick="goToAdminPanel(); toggleMobileMenu();" class="btn btn-outline-gold" style="width: 100%; font-size: 0.9rem;">
+          <i class="fa-solid fa-lock"></i> Admin Login
+        </button>
+      </li>
+      <li class="admin-logout-btn" style="margin-top: 20px; display: none;">
+        <button onclick="logoutAdmin(); toggleMobileMenu();" class="btn btn-outline" style="width: 100%; font-size: 0.9rem; color: var(--cream-200); border-color: var(--cream-200);">
+          <i class="fa-solid fa-sign-out-alt"></i> Admin Logout
+        </button>
+      </li>
+      <li style="margin-top: 20px;">
+        <a href="tel:9783656009" style="color: var(--gold-400);"><i class="fa-solid fa-phone"></i> Call: 9783656009</a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Page Hero Header -->
+  <div class="page-hero-header">
+    <div class="container">
+      <h1 class="page-hero-title">Our Heritage & Artisan Craft</h1>
+      <div class="breadcrumbs">
+        <a href="index.html">Home</a>
+        <span>/</span>
+        <span>Heritage & Artisans</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Story Section -->
+  <section class="heritage-story-block">
+    <div class="container">
+      <div class="story-grid">
+        <div class="story-text">
+          <span class="section-subtitle">Born in Shekhawati</span>
+          <h3>The Art of Sardarshahar Woodcraft</h3>
+          <p>
+            Sardarshahar, located in the historic Churu district of Rajasthan, has long been revered as an epicenter of Indian hardwood craft. For centuries, the royal havelis and merchant palaces of Shekhawati stood adorned with hand-chiseled wooden doors, magnificent arches, and brass-studded timber chests that braved the harsh desert climate with unmatched dignity.
+          </p>
+          <div class="story-quote">
+            "We do not merely cut and join wood; we breathe royal Rajasthani heritage into every grain of seasoned Sheesham."
+          </div>
+          <p>
+            At <strong>Devwood Dekor</strong>, we carry forward this unbroken lineage. Operating from our workshop and showroom on Taranagar Road (just 1 KM from Sardarshahar Circle), our master artisans work with authentic seasoned Sheesham (Indian Rosewood) and Sagwan (Teak Wood) using traditional handheld gouges, chisels, and hand-rubbed wax finishes.
+          </p>
+          <div style="display: flex; gap: 20px; margin-top: 30px;">
+            <div style="background: var(--cream-100); padding: 16px 22px; border-radius: 8px; border-left: 3px solid var(--gold-500);">
+              <strong style="display: block; font-size: 1.5rem; color: var(--wood-900);">100%</strong>
+              <span style="font-size: 0.82rem; color: var(--muted-text);">Solid Natural Timber</span>
+            </div>
+            <div style="background: var(--cream-100); padding: 16px 22px; border-radius: 8px; border-left: 3px solid var(--gold-500);">
+              <strong style="display: block; font-size: 1.5rem; color: var(--wood-900);">Zero MDF</strong>
+              <span style="font-size: 0.82rem; color: var(--muted-text);">No Particle Board / Veneer</span>
+            </div>
+            <div style="background: var(--cream-100); padding: 16px 22px; border-radius: 8px; border-left: 3px solid var(--gold-500);">
+              <strong style="display: block; font-size: 1.5rem; color: var(--wood-900);">Pan-India</strong>
+              <span style="font-size: 0.82rem; color: var(--muted-text);">Crated Delivery Network</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="artisan-image-wrapper">
+          <div class="artisan-crest-card">
+            <i class="fa-solid fa-hammer" style="font-size: 3.5rem; color: var(--gold-400); margin-bottom: 14px;"></i>
+            <h3 style="font-family: var(--font-royal); font-size: 1.6rem; color: var(--cream-100); letter-spacing: 2px;">MASTER CRAFTSMANSHIP</h3>
+            <p style="color: var(--gold-400); font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; margin-top: 6px;">Traditional Karigars of Sardarshahar</p>
+            <div style="margin-top: 20px; padding: 12px 18px; background: rgba(212,175,55,0.12); border-radius: 8px; border: 1px solid var(--border-gold);">
+              <span style="display: block; font-size: 0.8rem; color: var(--cream-200); text-transform: uppercase; letter-spacing: 1px;">Hand-Carved Seasoned Timber</span>
+              <strong style="color: #fff; font-size: 1.05rem;">Generational Sheesham Heritage</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Antique Preservation Section -->
+  <section style="background: var(--wood-900); color: #fff; padding: 85px 0;">
+    <div class="container">
+      <div class="story-grid" style="direction: rtl;">
+        <div class="story-text" style="direction: ltr;">
+          <span class="section-subtitle" style="color: var(--gold-400);">Preserving History</span>
+          <h3 style="color: #fff;">Rare Rajasthani Antiques & Restoration</h3>
+          <p style="color: var(--cream-200);">
+            Beyond newly manufactured solid wood furniture, Devwood Dekor is celebrated as a sanctuary for genuine antique items. From century-old Haveli doors salvaged from royal estates to antique brass lamps, Damchiya bridal chests, and vintage Jharokhas.
+          </p>
+          <p style="color: var(--cream-200);">
+            Our restoration philosophy preserves the historical soul and weathered patina of every artifact while structurally reinforcing the joints, hinges, and iron latches so they can be admired for another century in modern penthouses and luxury villas.
+          </p>
+          <div style="margin-top: 30px;">
+            <a href="shop.html" class="btn btn-gold">
+              <i class="fa-solid fa-gem"></i> Explore Antique Artefacts
+            </a>
+          </div>
+        </div>
+
+        <div style="direction: ltr;">
+          <div class="artisan-crest-card">
+            <i class="fa-solid fa-gem" style="font-size: 3.5rem; color: var(--gold-400); margin-bottom: 14px;"></i>
+            <h3 style="font-family: var(--font-royal); font-size: 1.6rem; color: var(--cream-100); letter-spacing: 2px;">RARE ANTIQUES</h3>
+            <p style="color: var(--gold-400); font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; margin-top: 6px;">Authentic Shekhawati Antiques</p>
+            <div style="margin-top: 20px; padding: 12px 18px; background: rgba(212,175,55,0.12); border-radius: 8px; border: 1px solid var(--border-gold);">
+              <span style="display: block; font-size: 0.8rem; color: var(--cream-200); text-transform: uppercase; letter-spacing: 1px;">Restored Century-Old Artefacts</span>
+              <strong style="color: #fff; font-size: 1.05rem;">Haveli Doors, Jharokhas & Damchiya</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 Step Custom Order Process -->
+  <section style="padding: 85px 0; background: var(--cream-50);">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-subtitle">Bespoke Process</span>
+        <h2 class="section-title">How We Build For You</h2>
+        <p class="section-desc">From your initial concept to the final polished masterpiece delivered to your home.</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;">
+        <div style="background: #fff; padding: 32px 24px; border-radius: 12px; border: 1px solid var(--border-light); text-align: center; box-shadow: var(--shadow-sm);">
+          <div style="width: 56px; height: 56px; background: var(--wood-900); color: var(--gold-400); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin: 0 auto 20px auto; font-family: var(--font-royal); font-weight: 700;">1</div>
+          <h4 style="font-size: 1.1rem; color: var(--wood-900); margin-bottom: 8px;">Consultation</h4>
+          <p style="font-size: 0.88rem; color: var(--muted-text); line-height: 1.5;">Share your dimensions, preferred wood, and references via WhatsApp or at our showroom.</p>
+        </div>
+
+        <div style="background: #fff; padding: 32px 24px; border-radius: 12px; border: 1px solid var(--border-light); text-align: center; box-shadow: var(--shadow-sm);">
+          <div style="width: 56px; height: 56px; background: var(--wood-900); color: var(--gold-400); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin: 0 auto 20px auto; font-family: var(--font-royal); font-weight: 700;">2</div>
+          <h4 style="font-size: 1.1rem; color: var(--wood-900); margin-bottom: 8px;">Timber Selection</h4>
+          <p style="font-size: 0.88rem; color: var(--muted-text); line-height: 1.5;">We hand-pick seasoned solid Sheesham logs with natural grain flow and zero structural flaws.</p>
+        </div>
+
+        <div style="background: #fff; padding: 32px 24px; border-radius: 12px; border: 1px solid var(--border-light); text-align: center; box-shadow: var(--shadow-sm);">
+          <div style="width: 56px; height: 56px; background: var(--wood-900); color: var(--gold-400); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin: 0 auto 20px auto; font-family: var(--font-royal); font-weight: 700;">3</div>
+          <h4 style="font-size: 1.1rem; color: var(--wood-900); margin-bottom: 8px;">Hand Carving</h4>
+          <p style="font-size: 0.88rem; color: var(--muted-text); line-height: 1.5;">Master karigars in Sardarshahar carve floral Jaali motifs and hand-rub traditional oils & wax.</p>
+        </div>
+
+        <div style="background: #fff; padding: 32px 24px; border-radius: 12px; border: 1px solid var(--border-light); text-align: center; box-shadow: var(--shadow-sm);">
+          <div style="width: 56px; height: 56px; background: var(--wood-900); color: var(--gold-400); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin: 0 auto 20px auto; font-family: var(--font-royal); font-weight: 700;">4</div>
+          <h4 style="font-size: 1.1rem; color: var(--wood-900); margin-bottom: 8px;">Crated Dispatch</h4>
+          <p style="font-size: 0.88rem; color: var(--muted-text); line-height: 1.5;">Every furniture piece is wrapped in foam and secured in heavy wooden crates for pan-India transit.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Showroom Location Callout -->
+  <section class="showroom-banner">
+    <div class="container">
+      <div class="showroom-card">
+        <div class="showroom-info">
+          <span class="section-subtitle">Showroom & Workshop</span>
+          <h3>Visit Devwood Dekor in Sardarshahar</h3>
+          <p>
+            We welcome architects, interior designers, collectors, and families to witness our craftsmanship firsthand.
+          </p>
+          <div class="showroom-address-box">
+            <p>
+              <strong>Address:</strong><br>
+              Taranagar Road, 1 KM from Sardarshahar Circle, Sardarshahar, Rajasthan<br>
+              <strong>Direct Phone:</strong> +91 9783656009
+            </p>
+          </div>
+          <div class="showroom-actions">
+            <a href="contact.html" class="btn btn-primary">
+              <i class="fa-solid fa-map-location-dot"></i> Showroom & Route Details
+            </a>
+            <a href="https://wa.me/919783656009" target="_blank" class="btn btn-outline">
+              <i class="fa-brands fa-whatsapp" style="color: #25d366;"></i> WhatsApp 9783656009
+            </a>
+          </div>
+        </div>
+
+        <div class="route-indicator">
+          <span class="milestone-badge">1 KM From Circle</span>
+          <h4>How to Reach Us</h4>
+          <p>
+            From <strong>Sardarshahar Circle</strong>, turn towards <strong>Taranagar Road</strong>. Travel just 1 km to reach our grand showroom and wood crafting studio.
+          </p>
+          <div class="call-now-highlight">
+            <i class="fa-solid fa-phone"></i> 9783656009
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <h3>DEVWOOD <span>DEKOR</span></h3>
+          <p>
+            Preserving the royal woodcarving heritage of Shekhawati. Solid Sheesham furniture and genuine antique artefacts in Sardarshahar, Rajasthan.
+          </p>
+          <div class="footer-contact-list">
+            <div class="footer-contact-item">
+              <i class="fa-solid fa-location-dot"></i>
+              <span>Taranagar Road, 1 KM from Sardarshahar Circle, Sardarshahar, Rajasthan</span>
+            </div>
+            <div class="footer-contact-item">
+              <i class="fa-solid fa-phone"></i>
+              <span><a href="tel:9783656009" style="color: var(--gold-400); font-weight: 700;">+91 9783656009</a></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-column">
+          <h4>Explore</h4>
+          <ul class="footer-links">
+            <li><a href="shop.html">Living Room Furniture</a></li>
+            <li><a href="shop.html">Royal Dining Sets</a></li>
+            <li><a href="shop.html">Maharaja King Beds</a></li>
+            <li><a href="shop.html">Antique Jharokhas</a></li>
+            <li><a href="shop.html">Antique Chests</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4>Pages</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html">Shop Collection</a></li>
+            <li><a href="about.html">Heritage & Artisans</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4>Contact & Visit</h4>
+          <p style="font-size: 0.9rem; color: var(--cream-300); line-height: 1.6;">
+            Open 7 days a week: 9:30 AM – 8:30 PM.<br>
+            Taranagar Road, 1 KM from Sardarshahar Circle.<br>
+            Phone: +91 9783656009
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 Devwood Dekor. All Rights Reserved.</div>
+        <div>Sardarshahar, Rajasthan | Contact: 9783656009</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Slide-out Cart Drawer -->
+  <div class="cart-drawer-backdrop" id="cartBackdrop" onclick="closeCartDrawer()"></div>
+  <aside class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <h3><i class="fa-solid fa-bag-shopping"></i> Your Selected Items</h3>
+      <button class="close-cart-btn" onclick="closeCartDrawer()" title="Close Cart">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="cart-items-container" id="cartItemsList"></div>
+    <div class="cart-footer">
+      <div class="cart-subtotal">
+        <span>Subtotal:</span>
+        <span id="cartSubtotalAmount">₹0</span>
+      </div>
+      <button class="btn-checkout-whatsapp" onclick="checkoutViaWhatsApp()">
+        <i class="fa-brands fa-whatsapp" style="font-size: 1.3rem;"></i>
+        <span>Confirm Order on WhatsApp</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Quick View Modal -->
+  <div class="modal-backdrop" id="quickViewModal">
+    <div class="modal-box">
+      <button class="modal-close-btn" onclick="closeQuickView()" title="Close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div id="quickViewContent" style="display: contents;"></div>
+    </div>
+  </div>
+
+  <!-- Floating WhatsApp -->
+  <a href="https://wa.me/919783656009?text=Hello%20Devwood%20Dekor,%20I%20want%20to%20know%20more%20about%20your%20artisans%20and%20furniture." target="_blank" class="floating-whatsapp" title="Chat on WhatsApp (+91 9783656009)">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
+  <script src="main.js"></script>
+</body>
+</html>
