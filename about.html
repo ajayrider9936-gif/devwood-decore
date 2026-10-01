@@ -14,15 +14,15 @@
 <body>
 
   <!-- Top Announcement Bar -->
-  <div class="announcement-bar">
+  <div class="announcement-bar" id="announcementBar">
     <div class="container announcement-content">
       <div class="announcement-item">
         <i class="fa-solid fa-location-dot"></i>
-        <span>Showroom: Taranagar Road, 1 KM from Sardarshahar Circle, Sardarshahar, Rajasthan</span>
+        <span data-stext="announcement">Showroom: Taranagar Road, 1 KM from Sardarshahar Circle, Sardarshahar, Rajasthan</span>
       </div>
       <div class="announcement-item">
         <i class="fa-solid fa-phone"></i>
-        <span>Helpline: <a href="tel:9783656009" class="announcement-link">9783656009</a></span>
+        <span>Helpline: <a href="tel:9783656009" data-stel="phone" class="announcement-link"><span data-stext="phone">9783656009</span></a></span>
         <span style="margin: 0 8px; color: var(--gold-500);">|</span>
         <i class="fa-brands fa-whatsapp" style="color: #25d366;"></i>
         <a href="https://wa.me/919783656009" target="_blank" class="announcement-link">WhatsApp Us</a>
@@ -39,7 +39,7 @@
         </div>
         <div class="brand-text-wrap">
           <span class="brand-title">DEVWOOD <span>DEKOR</span></span>
-          <span class="brand-tagline">ROYAL WOODCRAFT & ANTIQUES</span>
+          <span class="brand-tagline" data-stext="tagline">ROYAL WOODCRAFT & ANTIQUES</span>
         </div>
       </a>
 
@@ -61,9 +61,9 @@
           <i class="fa-solid fa-gauge"></i> <span>Admin Panel</span>
         </a>
 
-        <a href="https://wa.me/919783656009" target="_blank" class="whatsapp-direct-btn">
+        <a href="https://wa.me/919783656009" target="_blank" class="whatsapp-direct-btn" data-swa>
           <i class="fa-brands fa-whatsapp"></i>
-          <span>Chat 9783656009</span>
+          <span>Chat <span data-stext="phone">9783656009</span></span>
         </a>
 
         <button class="action-btn" onclick="openCartDrawer()" title="View Cart">
@@ -102,7 +102,7 @@
         </button>
       </li>
       <li style="margin-top: 20px;">
-        <a href="tel:9783656009" style="color: var(--gold-400);"><i class="fa-solid fa-phone"></i> Call: 9783656009</a>
+        <a href="tel:9783656009" data-stel="phone" style="color: var(--gold-400);"><i class="fa-solid fa-phone"></i> Call: <span data-stext="phone">9783656009</span></a>
       </li>
     </ul>
   </div>
@@ -125,8 +125,8 @@
       <div class="story-grid">
         <div class="story-text">
           <span class="section-subtitle">Born in Shekhawati</span>
-          <h3>The Art of Sardarshahar Woodcraft</h3>
-          <p>
+          <h3 data-stext="about_title">The Art of Sardarshahar Woodcraft</h3>
+          <p data-stext="about_text">
             Sardarshahar, located in the historic Churu district of Rajasthan, has long been revered as an epicenter of Indian hardwood craft. For centuries, the royal havelis and merchant palaces of Shekhawati stood adorned with hand-chiseled wooden doors, magnificent arches, and brass-studded timber chests that braved the harsh desert climate with unmatched dignity.
           </p>
           <div class="story-quote">
@@ -152,6 +152,7 @@
         </div>
 
         <div class="artisan-image-wrapper">
+          <img data-ssrc="about_image" alt="Devwood Dekor Workshop" class="hidden-until-set" style="width:100%;border-radius:12px;margin-bottom:18px;border:2px solid var(--gold-500);">
           <div class="artisan-crest-card">
             <i class="fa-solid fa-hammer" style="font-size: 3.5rem; color: var(--gold-400); margin-bottom: 14px;"></i>
             <h3 style="font-family: var(--font-royal); font-size: 1.6rem; color: var(--cream-100); letter-spacing: 2px;">MASTER CRAFTSMANSHIP</h3>
@@ -251,15 +252,15 @@
           <div class="showroom-address-box">
             <p>
               <strong>Address:</strong><br>
-              Taranagar Road, 1 KM from Sardarshahar Circle, Sardarshahar, Rajasthan<br>
-              <strong>Direct Phone:</strong> +91 9783656009
+              <span data-stext="address">Taranagar Road, 1 KM from Sardarshahar Circle, Sardarshahar, Rajasthan</span><br>
+              <strong>Direct Phone:</strong> <a data-stel="phone" href="tel:9783656009" style="color:inherit;"><span data-stext="phone">+91 9783656009</span></a>
             </p>
           </div>
           <div class="showroom-actions">
             <a href="contact.html" class="btn btn-primary">
               <i class="fa-solid fa-map-location-dot"></i> Showroom & Route Details
             </a>
-            <a href="https://wa.me/919783656009" target="_blank" class="btn btn-outline">
+            <a href="https://wa.me/919783656009" data-swa target="_blank" class="btn btn-outline">
               <i class="fa-brands fa-whatsapp" style="color: #25d366;"></i> WhatsApp 9783656009
             </a>
           </div>
@@ -291,11 +292,11 @@
           <div class="footer-contact-list">
             <div class="footer-contact-item">
               <i class="fa-solid fa-location-dot"></i>
-              <span>Taranagar Road, 1 KM from Sardarshahar Circle, Sardarshahar, Rajasthan</span>
+              <span data-stext="address">Taranagar Road, 1 KM from Sardarshahar Circle, Sardarshahar, Rajasthan</span>
             </div>
             <div class="footer-contact-item">
               <i class="fa-solid fa-phone"></i>
-              <span><a href="tel:9783656009" style="color: var(--gold-400); font-weight: 700;">+91 9783656009</a></span>
+              <span><a href="tel:9783656009" data-stel="phone" style="color: var(--gold-400); font-weight: 700;"><span data-stext="phone">+91 9783656009</span></a></span>
             </div>
           </div>
         </div>
@@ -375,6 +376,9 @@
     <i class="fa-brands fa-whatsapp"></i>
   </a>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/db.js"></script>
   <script src="main.js"></script>
 </body>
 </html>
