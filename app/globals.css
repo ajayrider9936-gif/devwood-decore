@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ivory: #FAF6EF;
+  --color-cream: #F1E7D3;
+  --color-sand: #E9DFCB;
+  --color-walnut: #221610;
+  --color-bark: #4A3325;
+  --color-gold: #C2943A;
+  --color-golddeep: #9A7326;
+  --color-ink: #2E2119;
+  --color-muted: #8A7663;
+  --color-line: #E7DCC6;
+  --color-leaf: #1FA855;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  background: var(--color-ivory);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-display {
+  font-family: var(--font-playfair), Georgia, "Times New Roman", serif;
+}
+
+/* thin elegant scrollbar for admin tables */
+.nice-scroll::-webkit-scrollbar { height: 8px; width: 8px; }
+.nice-scroll::-webkit-scrollbar-thumb { background: #D8C9AC; border-radius: 8px; }
+
+/* subtle fade-up on load */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.rise { animation: rise .55s ease both; }
+.rise-1 { animation-delay: .06s; }
+.rise-2 { animation-delay: .12s; }
+.rise-3 { animation-delay: .18s; }
+
+input, textarea, select { font-family: inherit; }
+input:focus, textarea:focus, select:focus {
+  outline: 2px solid rgba(194, 148, 58, .45);
+  outline-offset: 0;
+  border-color: var(--color-gold) !important;
+}
