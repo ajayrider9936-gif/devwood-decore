@@ -4,6 +4,7 @@ import WhatsAppFloat from "@/components/public/WhatsAppFloat";
 import SectionHead from "@/components/public/SectionHead";
 import ContactForm from "./ContactForm";
 import { getSettings } from "@/lib/site";
+import { IconPhone, IconWhatsApp, IconPin } from "@/components/icons";
 
 export const metadata = { title: "Contact — Devwood Dekor" };
 
@@ -22,12 +23,12 @@ export default async function ContactPage() {
             <h3 className="font-display text-xl font-bold text-walnut mb-5">Store Details</h3>
             <div className="space-y-4 text-[15px]">
               {settings.phone && (
-                <p>📞 <a href={`tel:${settings.phone.replace(/\s/g, "")}`} className="font-semibold text-bark hover:text-golddeep">{settings.phone}</a></p>
+                <p className="flex items-center gap-3"><IconPhone className="w-4.5 h-4.5 w-[18px] h-[18px] text-golddeep flex-none" /> <a href={`tel:${settings.phone.replace(/\s/g, "")}`} className="font-semibold text-bark hover:text-golddeep">{settings.phone}</a></p>
               )}
               {whatsapp && (
-                <p>💬 <span className="font-semibold text-bark">WhatsApp: +{whatsapp.replace(/\D/g, "")}</span></p>
+                <p className="flex items-center gap-3"><IconWhatsApp className="w-[18px] h-[18px] text-[#1FA855] flex-none" /> <span className="font-semibold text-bark">WhatsApp: +{whatsapp.replace(/\D/g, "")}</span></p>
               )}
-              {settings.address && <p>📍 <span className="text-bark">{settings.address}</span></p>}
+              {settings.address && <p className="flex items-start gap-3"><IconPin className="w-[18px] h-[18px] text-golddeep flex-none mt-0.5" /> <span className="text-bark">{settings.address}</span></p>}
               <div className="flex gap-4 pt-2 text-sm font-semibold">
                 {settings.facebook && <a href={settings.facebook} target="_blank" rel="noreferrer" className="text-golddeep hover:underline">Facebook</a>}
                 {settings.instagram && <a href={settings.instagram} target="_blank" rel="noreferrer" className="text-golddeep hover:underline">Instagram</a>}

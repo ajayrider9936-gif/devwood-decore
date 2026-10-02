@@ -5,6 +5,7 @@ import { getSupabaseBrowser } from "@/lib/supabase-browser";
 import { slugify } from "@/lib/types";
 import type { Category } from "@/lib/types";
 import { compressImage } from "./compressImage";
+import { IconImage } from "@/components/icons";
 
 export default function CategoryManager({ initial }: { initial: Category[] }) {
   const fileRef = useRef<HTMLInputElement>(null);
@@ -200,7 +201,7 @@ export default function CategoryManager({ initial }: { initial: Category[] }) {
               {imageUrl ? (
                 <img src={imageUrl} alt="" className="w-14 h-14 rounded-xl object-cover border border-line" />
               ) : (
-                <div className="w-14 h-14 rounded-xl bg-cream border border-dashed border-gold/50 flex items-center justify-center text-muted text-xl">🖼️</div>
+                <div className="w-14 h-14 rounded-xl bg-cream border border-dashed border-gold/50 flex items-center justify-center"><IconImage className="w-6 h-6 text-muted" /></div>
               )}
               <div>
                 <button

@@ -9,6 +9,7 @@ import WhatsAppFloat from "@/components/public/WhatsAppFloat";
 import { getSettings, getCategories, getFeaturedProducts } from "@/lib/site";
 import { isSupabaseConfigured } from "@/lib/supabase-config";
 import { waLink } from "@/lib/whatsapp";
+import { IconTree, IconHand, IconRuler } from "@/components/icons";
 
 export default async function HomePage() {
   const [settings, categories, featured] = await Promise.all([
@@ -72,13 +73,19 @@ export default async function HomePage() {
                 className="absolute inset-0"
                 style={{
                   background:
-                    "radial-gradient(circle at 70% 20%,rgba(194,148,58,.35),transparent 45%),radial-gradient(circle at 20% 85%,rgba(0,0,0,.4),transparent 50%)",
+                    "radial-gradient(circle at 70% 20%,rgba(194,148,58,.30),transparent 45%),radial-gradient(circle at 20% 85%,rgba(0,0,0,.45),transparent 50%)",
                 }}
               />
-              {/* CSS-art sofa */}
-              <div className="absolute bottom-16 left-1/2 -translate-x-1/2 w-[70%]">
-                <div className="h-[70px] mx-[8%] rounded-[18px] bg-gradient-to-b from-[#9A6A3E] to-[#6B4426]" />
-                <div className="h-[130px] rounded-[26px_26px_12px_12px] bg-gradient-to-b from-[#8A5E36] to-[#5E3D22] shadow-2xl -mt-3" />
+              {/* Subtle wood-grain lines */}
+              <svg className="absolute inset-0 w-full h-full opacity-[0.14]" preserveAspectRatio="none" viewBox="0 0 400 400">
+                {[30, 70, 115, 165, 220, 280, 345].map((y) => (
+                  <path key={y} d={`M-20 ${y} C 80 ${y - 24}, 180 ${y + 24}, 300 ${y - 12} S 420 ${y + 8}, 440 ${y}`}
+                    fill="none" stroke="#E8C97A" strokeWidth="1.6" />
+                ))}
+              </svg>
+              <div className="absolute bottom-10 left-8 sm:left-12">
+                <p className="font-display italic text-[#EFE3CC]/90 text-xl sm:text-2xl">Solid wood,</p>
+                <p className="font-display text-[#EFE3CC]/90 text-xl sm:text-2xl">honest craft.</p>
               </div>
             </div>
           )}
@@ -133,27 +140,21 @@ export default async function HomePage() {
       <section className="bg-cream">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 py-16 grid gap-10 md:grid-cols-3 text-center">
           {[
-            ["🪵", "Seasoned Timber", "Only mature sheesham & teak, naturally seasoned for strength."],
-            ["🤲", "Hand Finished", "Every edge carved, sanded & polished by master artisans."],
-            ["📐", "Made to Order", "Custom sizes & finishes — built exactly for your home."],
-          ].map(([ic, t, d]) => (
+            { Icon: IconTree, t: "Seasoned Timber", d: "Only mature sheesham & teak, naturally seasoned for strength." },
+            { Icon: IconHand, t: "Hand Finished", d: "Every edge carved, sanded & polished by master artisans." },
+            { Icon: IconRuler, t: "Made to Order", d: "Custom sizes & finishes — built exactly for your home." },
+          ].map(({ Icon, t, d }) => (
             <div key={t}>
-              <div className="text-4xl">{ic}</div>
-              <h3 className="font-display text-xl font-bold text-walnut mt-3 mb-2">{t}</h3>
-              <p className="text-sm text-[#5C4B3D] leading-7">{d}</p>
+              <div className="w-14 h-14 mx-auto rounded-full bg-white border border-line shadow-[0_4px_14px_rgba(74,51,37,.08)] flex items-center justify-center">
+                <Icon className="w-6 h-6 text-golddeep" />
+              </div>
+              <h3 className="font-display text-xl font-bold text-walnut mt-4 mb-2">{t}</h3>
+              <p className="text-sm text-[#5C4B3D] leading-7 max-w-xs mx-auto">{d}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* TESTIMONIAL */}
-      <section className="max-w-3xl mx-auto px-5 py-16 text-center">
-        <p className="font-display italic text-xl sm:text-2xl text-bark leading-relaxed">
-          “The jhula became the heart of our living room. Finish quality is beyond what we saw in
-          big showrooms.”
-        </p>
-        <p className="text-muted text-sm mt-4">— Priya S., Jaipur</p>
-      </section>
 
       <Footer
         siteName={siteName}

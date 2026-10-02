@@ -3,6 +3,7 @@ import Footer from "@/components/public/Footer";
 import WhatsAppFloat from "@/components/public/WhatsAppFloat";
 import SectionHead from "@/components/public/SectionHead";
 import { getSettings } from "@/lib/site";
+import { IconLeaf, IconHand, IconTruck } from "@/components/icons";
 
 export const metadata = { title: "About Us — Devwood Dekor" };
 
@@ -26,10 +27,18 @@ export default async function AboutPage() {
             <img src={aboutImage} alt={aboutTitle} className="rounded-2xl border border-line w-full object-cover" />
           ) : (
             <div
-              className="rounded-2xl h-80 flex items-center justify-center font-display text-7xl font-extrabold text-white/80"
+              className="rounded-2xl h-80 relative overflow-hidden flex items-center justify-center"
               style={{ background: "linear-gradient(135deg,#6B4A2F,#241610)" }}
             >
-              {siteName.charAt(0)}
+              <svg className="absolute inset-0 w-full h-full opacity-[0.12]" preserveAspectRatio="none" viewBox="0 0 400 320">
+                {[40, 90, 145, 205, 270].map((y) => (
+                  <path key={y} d={`M-20 ${y} C 80 ${y - 20}, 180 ${y + 20}, 300 ${y - 10} S 420 ${y + 6}, 440 ${y}`}
+                    fill="none" stroke="#E8C97A" strokeWidth="1.6" />
+                ))}
+              </svg>
+              <span className="relative font-display italic text-[#EFE3CC]/85 text-2xl px-8 text-center">
+                Crafted in Sardarshahar, Rajasthan
+              </span>
             </div>
           )}
           <p className="text-[#5C4B3D] leading-8 whitespace-pre-line">{aboutText}</p>
@@ -37,13 +46,15 @@ export default async function AboutPage() {
 
         <div className="grid sm:grid-cols-3 gap-5 mt-14">
           {[
-            ["🌳", "Honest Material", "Seasoned sheesham & teak — no veneer, no shortcuts."],
-            ["🤲", "Artisan Made", "Carved and polished by hand, piece by piece."],
-            ["🚚", "Across India", "Carefully packed and delivered to your doorstep."],
-          ].map(([ic, t, d]) => (
-            <div key={t} className="bg-white border border-line rounded-2xl p-6 text-center">
-              <div className="text-3xl">{ic}</div>
-              <h3 className="font-bold text-walnut mt-2 mb-1">{t}</h3>
+            { Icon: IconLeaf, t: "Honest Material", d: "Seasoned sheesham & teak — no veneer, no shortcuts." },
+            { Icon: IconHand, t: "Artisan Made", d: "Carved and polished by hand, piece by piece." },
+            { Icon: IconTruck, t: "Across India", d: "Carefully packed and delivered to your doorstep." },
+          ].map(({ Icon, t, d }) => (
+            <div key={t} className="bg-white border border-line rounded-2xl p-6 text-center shadow-[0_2px_10px_rgba(74,51,37,.05)] hover:shadow-[0_8px_24px_rgba(74,51,37,.10)] hover:-translate-y-0.5 transition-all">
+              <div className="w-12 h-12 mx-auto rounded-full bg-[#FBF7EE] border border-line flex items-center justify-center">
+                <Icon className="w-5 h-5 text-golddeep" />
+              </div>
+              <h3 className="font-bold text-walnut mt-3 mb-1">{t}</h3>
               <p className="text-sm text-muted leading-6">{d}</p>
             </div>
           ))}

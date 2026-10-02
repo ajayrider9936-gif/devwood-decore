@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin";
 import { formatINR } from "@/lib/types";
+import { IconBox, IconGlobe, IconFolder, IconStar } from "@/components/icons";
 
 export default async function DashboardPage() {
   const { sb } = await requireAdmin();
@@ -18,10 +19,10 @@ export default async function DashboardPage() {
 
   const products = prodRows.data || [];
   const stats = [
-    { label: "Total Products", n: products.length, icon: "🛋️", bg: "from-[#C2943A] to-[#9A7326]" },
-    { label: "Live on Website", n: products.filter((p) => p.is_active).length, icon: "🌐", bg: "from-[#1FA855] to-[#147A3E]" },
-    { label: "Categories", n: cTotal.count ?? 0, icon: "🗂️", bg: "from-[#7A5230] to-[#4A3325]" },
-    { label: "Featured", n: products.filter((p) => p.is_featured).length, icon: "⭐", bg: "from-[#E0A93E] to-[#B07E1F]" },
+    { label: "Total Products", n: products.length, Icon: IconBox, bg: "from-[#C2943A] to-[#9A7326]" },
+    { label: "Live on Website", n: products.filter((p) => p.is_active).length, Icon: IconGlobe, bg: "from-[#1FA855] to-[#147A3E]" },
+    { label: "Categories", n: cTotal.count ?? 0, Icon: IconFolder, bg: "from-[#7A5230] to-[#4A3325]" },
+    { label: "Featured", n: products.filter((p) => p.is_featured).length, Icon: IconStar, bg: "from-[#E0A93E] to-[#B07E1F]" },
   ];
 
   return (
@@ -45,8 +46,8 @@ export default async function DashboardPage() {
             key={s.label}
             className={`rise rise-${i} bg-white border border-line rounded-2xl p-5 shadow-[0_2px_10px_rgba(74,51,37,.05)] hover:shadow-[0_8px_24px_rgba(74,51,37,.10)] hover:-translate-y-0.5 transition-all`}
           >
-            <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${s.bg} flex items-center justify-center text-lg shadow-sm`}>
-              {s.icon}
+            <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${s.bg} flex items-center justify-center shadow-sm`}>
+              <s.Icon className="w-5 h-5 text-white" filled={s.label === "Featured"} />
             </div>
             <div className="text-3xl font-extrabold text-walnut mt-3 tabular-nums">{s.n}</div>
             <div className="text-xs font-semibold text-muted mt-1">{s.label}</div>
@@ -63,7 +64,6 @@ export default async function DashboardPage() {
         </div>
         {(recent.data || []).length === 0 ? (
           <div className="px-6 py-14 text-center">
-            <div className="text-4xl mb-3">🪑</div>
             <p className="font-display text-xl text-bark mb-1">No products yet</p>
             <p className="text-sm text-muted mb-5">Add your first handcrafted piece to get started.</p>
             <Link

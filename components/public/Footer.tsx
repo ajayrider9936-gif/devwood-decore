@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { IconPhone, IconWhatsApp, IconPin } from "@/components/icons";
 
 export default function Footer({
   siteName,
@@ -35,9 +36,9 @@ export default function Footer({
         </div>
         <div>
           <h4 className="text-white font-bold mb-2">Contact</h4>
-          {phone && <p>📞 {phone}</p>}
-          {whatsapp && <p>💬 WhatsApp: +{whatsapp.replace(/\D/g, "")}</p>}
-          {address && <p className="mt-2">📍 {address}</p>}
+          {phone && <p className="flex items-center gap-2.5"><IconPhone className="w-4 h-4 text-gold flex-none" /> {phone}</p>}
+          {whatsapp && <p className="flex items-center gap-2.5"><IconWhatsApp className="w-4 h-4 text-[#1FA855] flex-none" /> WhatsApp: +{whatsapp.replace(/\D/g, "")}</p>}
+          {address && <p className="flex items-start gap-2.5 mt-2"><IconPin className="w-4 h-4 text-gold flex-none mt-1" /> {address}</p>}
         </div>
       </div>
       <div className="border-t border-white/10 py-5 text-center text-xs opacity-70">

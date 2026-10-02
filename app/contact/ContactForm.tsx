@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { waLink } from "@/lib/whatsapp";
+import { IconWhatsApp } from "@/components/icons";
 
 export default function ContactForm({ whatsapp, siteName }: { whatsapp: string; siteName: string }) {
   const [name, setName] = useState("");
@@ -30,7 +31,7 @@ export default function ContactForm({ whatsapp, siteName }: { whatsapp: string; 
           disabled={!name.trim() || !message.trim()}
           className="w-full bg-leaf text-white font-bold py-3.5 rounded-xl disabled:opacity-40 hover:opacity-90"
         >
-          💬 Send via WhatsApp
+          <span className="inline-flex items-center gap-2"><IconWhatsApp className="w-5 h-5" /> Send via WhatsApp</span>
         </button>
         <p className="text-xs text-muted text-center">Opens WhatsApp with your message ready to send.</p>
       </div>

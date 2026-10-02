@@ -4,12 +4,13 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { getSupabaseBrowser } from "@/lib/supabase-browser";
+import { IconGrid, IconBox, IconFolder, IconGear, IconLogout, IconGlobe } from "@/components/icons";
 
 const LINKS = [
-  { href: "/admin/dashboard", label: "Dashboard", icon: "📊" },
-  { href: "/admin/products", label: "Products", icon: "🛋️" },
-  { href: "/admin/categories", label: "Categories", icon: "🗂️" },
-  { href: "/admin/settings", label: "Site Settings", icon: "⚙️" },
+  { href: "/admin/dashboard", label: "Dashboard", Icon: IconGrid },
+  { href: "/admin/products", label: "Products", Icon: IconBox },
+  { href: "/admin/categories", label: "Categories", Icon: IconFolder },
+  { href: "/admin/settings", label: "Site Settings", Icon: IconGear },
 ];
 
 export default function AdminShell({
@@ -57,7 +58,7 @@ export default function AdminShell({
                   : "text-[#CBBFA8] border-transparent hover:text-white"
               }`}
             >
-              <span>{l.icon}</span> {l.label}
+              <l.Icon className="w-[18px] h-[18px] flex-none" /> {l.label}
             </Link>
           );
         })}
@@ -69,13 +70,13 @@ export default function AdminShell({
           rel="noopener"
           className="flex items-center gap-2 w-full text-left px-4 py-2.5 text-sm font-semibold text-[#CBBFA8] hover:text-white rounded-lg hover:bg-white/5 transition-colors"
         >
-          🌐 View Website <span className="text-xs opacity-60">↗</span>
+          <IconGlobe className="w-4 h-4" /> View Website <span className="text-xs opacity-60">↗</span>
         </a>
         <button
           onClick={logout}
           className="w-full text-left px-4 py-2.5 text-sm font-semibold text-[#CBBFA8] hover:text-white rounded-lg hover:bg-white/5"
         >
-          🚪 Logout
+          <span className="inline-flex items-center gap-2"><IconLogout className="w-4 h-4" /> Logout</span>
         </button>
       </div>
     </div>

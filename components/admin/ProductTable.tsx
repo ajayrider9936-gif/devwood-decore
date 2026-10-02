@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { getSupabaseBrowser } from "@/lib/supabase-browser";
 import { formatINR } from "@/lib/types";
+import { IconStar } from "@/components/icons";
 import type { Product } from "@/lib/types";
 
 /**
@@ -65,7 +66,6 @@ export default function ProductTable({ products: initial }: { products: Product[
   if (items.length === 0) {
     return (
       <div className="bg-white border border-line rounded-2xl px-6 py-16 text-center shadow-[0_2px_10px_rgba(74,51,37,.05)]">
-        <div className="text-5xl mb-4">🪑</div>
         <p className="font-display text-2xl text-bark mb-2">No products yet</p>
         <p className="text-sm text-muted mb-6">Add your first handcrafted piece to the store.</p>
         <Link
@@ -133,9 +133,9 @@ export default function ProductTable({ products: initial }: { products: Product[
                   <button
                     onClick={() => toggle(p, "is_featured")}
                     title="Click to toggle featured on homepage"
-                    className="text-xl transition-transform active:scale-90 hover:scale-110 cursor-pointer"
+                    className={`transition-transform active:scale-90 hover:scale-110 cursor-pointer ${p.is_featured ? "text-gold" : "text-[#D8C9AC] hover:text-gold"}`}
                   >
-                    {p.is_featured ? "⭐" : "☆"}
+                    <IconStar className="w-5 h-5" filled={p.is_featured} />
                   </button>
                 </td>
                 <td className="px-5 py-3 text-right whitespace-nowrap">

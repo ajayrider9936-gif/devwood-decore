@@ -7,6 +7,7 @@ import ProductCard from "@/components/public/ProductCard";
 import { getSettings, getProductBySlug, getProducts } from "@/lib/site";
 import { formatINR } from "@/lib/types";
 import { waLink, productEnquiryMessage } from "@/lib/whatsapp";
+import { IconWhatsApp } from "@/components/icons";
 import Gallery from "./Gallery";
 
 export default async function ProductPage({
@@ -89,7 +90,7 @@ export default async function ProductPage({
                   rel="noopener noreferrer"
                   className="bg-leaf text-white font-bold px-8 py-3.5 rounded-full shadow-lg hover:opacity-90"
                 >
-                  💬 Enquire on WhatsApp
+                  <span className="inline-flex items-center gap-2"><IconWhatsApp className="w-5 h-5" /> Enquire on WhatsApp</span>
                 </a>
               ) : (
                 <span className="text-sm text-muted">Contact the store to enquire about this piece.</span>

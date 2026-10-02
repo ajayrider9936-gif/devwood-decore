@@ -132,7 +132,7 @@ export default function ProductForm({ product, categories }: Props) {
 
       {/* PHOTOS */}
       <div className="bg-white border border-line rounded-2xl p-6 mb-5 shadow-[0_2px_10px_rgba(74,51,37,.05)]">
-        <h3 className="font-display text-lg font-bold text-walnut mb-1">📷 Photos</h3>
+        <h3 className="font-display text-lg font-bold text-walnut mb-1">Photos</h3>
         <p className="text-xs text-muted mb-4">First photo is the cover. Upload as many as you like.</p>
         <div className="flex flex-wrap gap-3 mb-4">
           {images.map((url, i) => (
@@ -177,7 +177,7 @@ export default function ProductForm({ product, categories }: Props) {
 
       {/* DETAILS */}
       <div className="bg-white border border-line rounded-2xl p-6 mb-5 grid sm:grid-cols-2 gap-4 shadow-[0_2px_10px_rgba(74,51,37,.05)]">
-        <h3 className="font-display text-lg font-bold text-walnut sm:col-span-2 -mb-1">📝 Details</h3>
+        <h3 className="font-display text-lg font-bold text-walnut sm:col-span-2 -mb-1">Details</h3>
         <div className="sm:col-span-2">
           <label className={labelCls}>Product Name *</label>
           <input className={inputCls} value={name} onChange={(e) => onName(e.target.value)} placeholder="e.g. Royal Teak Jhula" />
@@ -232,7 +232,7 @@ export default function ProductForm({ product, categories }: Props) {
 
       {/* VISIBILITY */}
       <div className="bg-white border border-line rounded-2xl p-6 mb-6 shadow-[0_2px_10px_rgba(74,51,37,.05)]">
-        <h3 className="font-display text-lg font-bold text-walnut mb-4">👁️ Visibility</h3>
+        <h3 className="font-display text-lg font-bold text-walnut mb-4">Visibility</h3>
         <div className="flex flex-wrap gap-4">
         <button type="button" onClick={() => setIsActive(!isActive)}
           className="flex items-center gap-3 text-sm font-semibold cursor-pointer group">
@@ -246,7 +246,7 @@ export default function ProductForm({ product, categories }: Props) {
           <span className={`w-11 h-6 rounded-full p-1 transition-colors ${isFeatured ? "bg-gold" : "bg-[#D8C9AC]"}`}>
             <span className={`block w-4 h-4 bg-white rounded-full shadow transition-transform ${isFeatured ? "translate-x-5" : ""}`} />
           </span>
-          <span className="text-left">⭐ Featured on homepage<br /><span className="text-xs font-normal text-muted">{isFeatured ? "Shown in highlights" : "Not highlighted"}</span></span>
+          <span className="text-left">Featured on homepage<br /><span className="text-xs font-normal text-muted">{isFeatured ? "Shown in highlights" : "Not highlighted"}</span></span>
         </button>
         </div>
       </div>

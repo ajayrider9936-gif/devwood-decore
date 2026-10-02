@@ -3,6 +3,7 @@
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getSupabaseBrowser } from "@/lib/supabase-browser";
+import { IconLock } from "@/components/icons";
 
 const CONFIGURED =
   typeof process !== "undefined" &&
@@ -119,7 +120,7 @@ function AdminLogin() {
           {busy && <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />}
           {busy ? "Signing in…" : "Login →"}
         </button>
-        <p className="text-center text-xs text-muted mt-4">🔒 Secure admin access • Supabase Auth</p>
+        <p className="text-center text-xs text-muted mt-4 inline-flex items-center gap-1.5 justify-center w-full"><IconLock className="w-3.5 h-3.5" /> Secure admin access • Supabase Auth</p>
         </div>
       </form>
     </div>
