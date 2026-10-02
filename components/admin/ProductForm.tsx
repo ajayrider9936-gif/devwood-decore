@@ -119,11 +119,11 @@ export default function ProductForm({ product, categories }: Props) {
   };
 
   const inputCls =
-    "w-full border-[1.5px] border-line rounded-xl px-4 py-2.5 text-sm bg-white";
+    "w-full border-[1.5px] border-line rounded-xl px-4 py-2.5 text-sm bg-white transition-shadow focus:shadow-[0_0_0_3px_rgba(194,148,58,.15)]";
   const labelCls = "block text-[13px] font-bold text-bark mb-1.5";
 
   return (
-    <div className="max-w-3xl">
+    <div className="max-w-3xl rise">
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl px-4 py-3 mb-5">
           {error}
@@ -131,8 +131,8 @@ export default function ProductForm({ product, categories }: Props) {
       )}
 
       {/* PHOTOS */}
-      <div className="bg-white border border-line rounded-2xl p-6 mb-5">
-        <h3 className="font-bold text-walnut mb-1">Photos</h3>
+      <div className="bg-white border border-line rounded-2xl p-6 mb-5 shadow-[0_2px_10px_rgba(74,51,37,.05)]">
+        <h3 className="font-display text-lg font-bold text-walnut mb-1">📷 Photos</h3>
         <p className="text-xs text-muted mb-4">First photo is the cover. Upload as many as you like.</p>
         <div className="flex flex-wrap gap-3 mb-4">
           {images.map((url, i) => (
@@ -176,7 +176,8 @@ export default function ProductForm({ product, categories }: Props) {
       </div>
 
       {/* DETAILS */}
-      <div className="bg-white border border-line rounded-2xl p-6 mb-5 grid sm:grid-cols-2 gap-4">
+      <div className="bg-white border border-line rounded-2xl p-6 mb-5 grid sm:grid-cols-2 gap-4 shadow-[0_2px_10px_rgba(74,51,37,.05)]">
+        <h3 className="font-display text-lg font-bold text-walnut sm:col-span-2 -mb-1">📝 Details</h3>
         <div className="sm:col-span-2">
           <label className={labelCls}>Product Name *</label>
           <input className={inputCls} value={name} onChange={(e) => onName(e.target.value)} placeholder="e.g. Royal Teak Jhula" />
@@ -230,28 +231,38 @@ export default function ProductForm({ product, categories }: Props) {
       </div>
 
       {/* VISIBILITY */}
-      <div className="bg-white border border-line rounded-2xl p-6 mb-6 flex flex-wrap gap-6">
-        <label className="flex items-center gap-2.5 text-sm font-semibold cursor-pointer">
-          <input type="checkbox" checked={isActive} onChange={(e) => setIsActive(e.target.checked)} className="w-5 h-5 accent-[#9A7326]" />
-          Live on website
-        </label>
-        <label className="flex items-center gap-2.5 text-sm font-semibold cursor-pointer">
-          <input type="checkbox" checked={isFeatured} onChange={(e) => setIsFeatured(e.target.checked)} className="w-5 h-5 accent-[#9A7326]" />
-          ⭐ Featured on homepage
-        </label>
+      <div className="bg-white border border-line rounded-2xl p-6 mb-6 shadow-[0_2px_10px_rgba(74,51,37,.05)]">
+        <h3 className="font-display text-lg font-bold text-walnut mb-4">👁️ Visibility</h3>
+        <div className="flex flex-wrap gap-4">
+        <button type="button" onClick={() => setIsActive(!isActive)}
+          className="flex items-center gap-3 text-sm font-semibold cursor-pointer group">
+          <span className={`w-11 h-6 rounded-full p-1 transition-colors ${isActive ? "bg-[#1FA855]" : "bg-[#D8C9AC]"}`}>
+            <span className={`block w-4 h-4 bg-white rounded-full shadow transition-transform ${isActive ? "translate-x-5" : ""}`} />
+          </span>
+          <span className="text-left">Live on website<br /><span className="text-xs font-normal text-muted">{isActive ? "Visible to customers" : "Hidden from store"}</span></span>
+        </button>
+        <button type="button" onClick={() => setIsFeatured(!isFeatured)}
+          className="flex items-center gap-3 text-sm font-semibold cursor-pointer group">
+          <span className={`w-11 h-6 rounded-full p-1 transition-colors ${isFeatured ? "bg-gold" : "bg-[#D8C9AC]"}`}>
+            <span className={`block w-4 h-4 bg-white rounded-full shadow transition-transform ${isFeatured ? "translate-x-5" : ""}`} />
+          </span>
+          <span className="text-left">⭐ Featured on homepage<br /><span className="text-xs font-normal text-muted">{isFeatured ? "Shown in highlights" : "Not highlighted"}</span></span>
+        </button>
+        </div>
       </div>
 
       <div className="flex gap-3">
         <button
           onClick={save}
           disabled={saving || uploading}
-          className="bg-gradient-to-br from-gold to-golddeep text-white font-bold px-8 py-3 rounded-full disabled:opacity-60 hover:opacity-95"
+          className="bg-gradient-to-br from-gold to-golddeep text-white font-bold px-8 py-3 rounded-full disabled:opacity-60 hover:opacity-95 shadow-[0_4px_14px_rgba(154,115,38,.3)] hover:-translate-y-px transition-all inline-flex items-center gap-2"
         >
+          {saving && <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />}
           {saving ? "Saving…" : product ? "Save Changes" : "Add Product"}
         </button>
         <button
           onClick={() => router.push("/admin/products")}
-          className="border-2 border-line text-bark font-bold px-8 py-3 rounded-full hover:border-walnut"
+          className="border-2 border-line text-bark font-bold px-8 py-3 rounded-full hover:border-walnut hover:bg-white transition-colors"
         >
           Cancel
         </button>

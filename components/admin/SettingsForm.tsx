@@ -66,10 +66,10 @@ export default function SettingsForm({ initial }: { initial: Record<string, stri
     setNewKey("");
   };
 
-  const inputCls = "w-full border-[1.5px] border-line rounded-xl px-4 py-2.5 text-sm bg-white";
+  const inputCls = "w-full border-[1.5px] border-line rounded-xl px-4 py-2.5 text-sm bg-white transition-shadow focus:shadow-[0_0_0_3px_rgba(194,148,58,.15)]";
 
   return (
-    <div className="max-w-3xl">
+    <div className="max-w-3xl rise">
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl px-4 py-3 mb-5">{error}</div>
       )}
@@ -79,7 +79,7 @@ export default function SettingsForm({ initial }: { initial: Record<string, stri
         </div>
       )}
 
-      <div className="bg-white border border-line rounded-2xl p-6 space-y-5">
+      <div className="bg-white border border-line rounded-2xl p-6 space-y-5 shadow-[0_2px_10px_rgba(74,51,37,.05)]">
         {Object.keys(values)
           .sort()
           .map((key) => (
@@ -111,9 +111,10 @@ export default function SettingsForm({ initial }: { initial: Record<string, stri
       <button
         onClick={save}
         disabled={saving}
-        className="mt-6 bg-gradient-to-br from-gold to-golddeep text-white font-bold px-10 py-3 rounded-full disabled:opacity-60 hover:opacity-95"
+        className="mt-6 bg-gradient-to-br from-gold to-golddeep text-white font-bold px-10 py-3 rounded-full disabled:opacity-60 hover:opacity-95 shadow-[0_4px_14px_rgba(154,115,38,.3)] hover:-translate-y-px transition-all inline-flex items-center gap-2"
       >
-        {saving ? "Saving…" : "Save All Settings"}
+        {saving && <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />}
+        {saving ? "Saving…" : saved ? "✓ Saved!" : "Save All Settings"}
       </button>
     </div>
   );

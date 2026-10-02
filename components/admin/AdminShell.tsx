@@ -53,7 +53,7 @@ export default function AdminShell({
               onClick={() => setOpen(false)}
               className={`flex items-center gap-3 px-6 py-3 text-sm font-semibold border-l-[3px] transition-colors ${
                 active
-                  ? "bg-[rgba(194,148,58,.14)] text-[#F0D9A0] border-gold"
+                  ? "bg-[rgba(194,148,58,.16)] text-[#F0D9A0] border-gold shadow-[inset_0_0_20px_rgba(194,148,58,.08)]"
                   : "text-[#CBBFA8] border-transparent hover:text-white"
               }`}
             >
@@ -62,7 +62,15 @@ export default function AdminShell({
           );
         })}
       </nav>
-      <div className="p-4">
+      <div className="p-4 space-y-1">
+        <a
+          href="/"
+          target="_blank"
+          rel="noopener"
+          className="flex items-center gap-2 w-full text-left px-4 py-2.5 text-sm font-semibold text-[#CBBFA8] hover:text-white rounded-lg hover:bg-white/5 transition-colors"
+        >
+          🌐 View Website <span className="text-xs opacity-60">↗</span>
+        </a>
         <button
           onClick={logout}
           className="w-full text-left px-4 py-2.5 text-sm font-semibold text-[#CBBFA8] hover:text-white rounded-lg hover:bg-white/5"

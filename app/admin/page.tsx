@@ -63,8 +63,10 @@ function AdminLogin() {
     >
       <form
         onSubmit={login}
-        className="bg-ivory rounded-2xl p-8 sm:p-10 w-full max-w-[400px] shadow-2xl"
+        className="bg-ivory rounded-3xl w-full max-w-[400px] shadow-2xl overflow-hidden rise"
       >
+        <div className="h-1.5 bg-gradient-to-r from-gold via-[#E0A93E] to-golddeep" />
+        <div className="p-8 sm:p-10">
         <div className="font-display text-3xl font-extrabold text-walnut text-center">
           Devwood <span className="italic text-golddeep">Dekor</span>
         </div>
@@ -98,7 +100,7 @@ function AdminLogin() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@example.com"
-          className="w-full border-[1.5px] border-line rounded-xl px-4 py-3 text-sm bg-white mb-4"
+          className="w-full border-[1.5px] border-line rounded-xl px-4 py-3 text-sm bg-white mb-4 transition-shadow focus:shadow-[0_0_0_3px_rgba(194,148,58,.15)]"
         />
         <label className="block text-[13px] font-bold text-bark mb-1.5">Password</label>
         <input
@@ -107,16 +109,18 @@ function AdminLogin() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="••••••••"
-          className="w-full border-[1.5px] border-line rounded-xl px-4 py-3 text-sm bg-white mb-5"
+          className="w-full border-[1.5px] border-line rounded-xl px-4 py-3 text-sm bg-white mb-5 transition-shadow focus:shadow-[0_0_0_3px_rgba(194,148,58,.15)]"
         />
         <button
           type="submit"
           disabled={busy}
-          className="w-full bg-gradient-to-br from-gold to-golddeep text-white font-extrabold py-3.5 rounded-xl disabled:opacity-60 hover:opacity-95"
+          className="w-full bg-gradient-to-br from-gold to-golddeep text-white font-extrabold py-3.5 rounded-xl disabled:opacity-60 hover:opacity-95 shadow-[0_4px_16px_rgba(154,115,38,.4)] transition-all inline-flex items-center justify-center gap-2"
         >
+          {busy && <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />}
           {busy ? "Signing in…" : "Login →"}
         </button>
         <p className="text-center text-xs text-muted mt-4">🔒 Secure admin access • Supabase Auth</p>
+        </div>
       </form>
     </div>
   );
