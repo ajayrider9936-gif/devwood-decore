@@ -37,6 +37,11 @@ export default function ProductCard({
             {product.badge}
           </span>
         )}
+        {product.is_new_arrival && (
+          <span className={`absolute ${product.badge ? "top-11" : "top-3"} left-3 bg-[#1FA855] text-white text-[11px] font-extrabold px-3 py-1 rounded-full tracking-wide`}>
+            NEW
+          </span>
+        )}
         {discount > 0 && (
           <span className="absolute top-3 right-3 bg-walnut text-white text-[11px] font-bold px-3 py-1 rounded-full">
             {discount}% OFF

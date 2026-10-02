@@ -44,9 +44,9 @@ export default function CategoryManager({ initial }: { initial: Category[] }) {
     try {
       const sb = getSupabaseBrowser();
       const blob = await compressImage(files[0], 800, 0.8);
-      const path = `categories/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
+      const path = `categories/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.webp`;
       const { error: upErr } = await sb.storage.from("product-images").upload(path, blob, {
-        contentType: "image/jpeg",
+        contentType: "image/webp",
         upsert: false,
       });
       if (upErr) throw upErr;

@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getSupabaseBrowser } from "@/lib/supabase-browser";
+import { compressImage } from "./compressImage";
+import { IconImage } from "@/components/icons";
 
 const LABELS: Record<string, string> = {
   site_name: "Site Name",
@@ -28,6 +30,9 @@ const LABELS: Record<string, string> = {
 
 const LONG_KEYS = new Set(["hero_subtitle", "about_text", "footer_text", "address", "announcement"]);
 
+// Settings keys that hold image URLs get an upload button alongside the URL field.
+const isImageKey = (key: string) => key.includes("image") || key.includes("logo") || key.includes("photo");
+
 export default function SettingsForm({ initial }: { initial: Record<string, string> }) {
   const router = useRouter();
   const [values, setValues] = useState<Record<string, string>>(initial);
@@ -35,6 +40,39 @@ export default function SettingsForm({ initial }: { initial: Record<string, stri
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
+  const [uploadingKey, setUploadingKey] = useState<string | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const uploadTarget = useRef<string | null>(null);
+
+  const startUpload = (key: string) => {
+    uploadTarget.current = key;
+    fileRef.current?.click();
+  };
+
+  const onFilePicked = async (files: FileList | null) => {
+    const key = uploadTarget.current;
+    if (!key || !files || !files[0]) return;
+    setUploadingKey(key);
+    setError("");
+    try {
+      const sb = getSupabaseBrowser();
+      const blob = await compressImage(files[0], 1600, 0.82);
+      const path = `site/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.webp`;
+      const { error: upErr } = await sb.storage.from("product-images").upload(path, blob, {
+        contentType: "image/webp",
+        upsert: false,
+      });
+      if (upErr) throw upErr;
+      const { data } = sb.storage.from("product-images").getPublicUrl(path);
+      setValues((v) => ({ ...v, [key]: data.publicUrl }));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Image upload failed");
+    } finally {
+      setUploadingKey(null);
+      uploadTarget.current = null;
+      if (fileRef.current) fileRef.current.value = "";
+    }
+  };
 
   const save = async () => {
     setSaving(true);
@@ -89,6 +127,37 @@ export default function SettingsForm({ initial }: { initial: Record<string, stri
               </label>
               {LONG_KEYS.has(key) ? (
                 <textarea className={inputCls} rows={3} value={values[key]} onChange={(e) => setValues((v) => ({ ...v, [key]: e.target.value }))} />
+              ) : isImageKey(key) ? (
+                <div>
+                  <div className="flex items-center gap-3 mb-2">
+                    {values[key] ? (
+                      <img src={values[key]} alt="" className="w-16 h-16 rounded-xl object-cover border border-line" />
+                    ) : (
+                      <div className="w-16 h-16 rounded-xl bg-cream border border-dashed border-gold/50 flex items-center justify-center">
+                        <IconImage className="w-6 h-6 text-muted" />
+                      </div>
+                    )}
+                    <button
+                      onClick={() => startUpload(key)}
+                      disabled={uploadingKey === key}
+                      className="text-sm font-bold text-golddeep border-[1.5px] border-gold px-4 py-2 rounded-full hover:bg-[#FBF7EE] disabled:opacity-50 transition-colors inline-flex items-center gap-2"
+                    >
+                      {uploadingKey === key && <span className="w-3.5 h-3.5 border-2 border-golddeep/40 border-t-golddeep rounded-full animate-spin" />}
+                      {uploadingKey === key ? "Uploading…" : values[key] ? "Replace image" : "Upload image"}
+                    </button>
+                    {values[key] && (
+                      <button onClick={() => setValues((v) => ({ ...v, [key]: "" }))} className="text-xs text-red-700 font-bold hover:underline">
+                        Clear
+                      </button>
+                    )}
+                  </div>
+                  <input
+                    className={inputCls}
+                    value={values[key]}
+                    onChange={(e) => setValues((v) => ({ ...v, [key]: e.target.value }))}
+                    placeholder="…or paste an image URL"
+                  />
+                </div>
               ) : (
                 <input className={inputCls} value={values[key]} onChange={(e) => setValues((v) => ({ ...v, [key]: e.target.value }))} />
               )}
@@ -116,6 +185,13 @@ export default function SettingsForm({ initial }: { initial: Record<string, stri
         {saving && <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />}
         {saving ? "Saving…" : saved ? "✓ Saved!" : "Save All Settings"}
       </button>
+      <input
+        ref={fileRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => onFilePicked(e.target.files)}
+      />
     </div>
   );
 }

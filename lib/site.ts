@@ -53,6 +53,11 @@ export async function getFeaturedProducts(): Promise<Product[]> {
   return all.filter((p) => p.is_featured).slice(0, 8);
 }
 
+export async function getNewArrivals(): Promise<Product[]> {
+  const all = await getProducts(true);
+  return all.filter((p) => p.is_new_arrival).slice(0, 8);
+}
+
 export async function getProductBySlug(slug: string): Promise<Product | null> {
   if (!isSupabaseConfigured()) return null;
   try {

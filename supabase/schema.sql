@@ -39,10 +39,14 @@ create table if not exists public.products (
   description text,
   images      text[] not null default '{}',
   is_featured boolean not null default false,
+  is_new_arrival boolean not null default false,
   is_active   boolean not null default true,
   sort_order  int not null default 0,
   created_at  timestamptz not null default now()
 );
+
+-- new-arrival flag (purane projects ke liye migration)
+alter table public.products add column if not exists is_new_arrival boolean not null default false;
 
 -- slug column (purane projects ke liye migration)
 alter table public.products add column if not exists slug text;

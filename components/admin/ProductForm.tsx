@@ -28,6 +28,7 @@ export default function ProductForm({ product, categories }: Props) {
   const [images, setImages] = useState<string[]>(product?.images || []);
   const [isActive, setIsActive] = useState(product?.is_active ?? true);
   const [isFeatured, setIsFeatured] = useState(product?.is_featured ?? false);
+  const [isNewArrival, setIsNewArrival] = useState(product?.is_new_arrival ?? false);
 
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -47,9 +48,9 @@ export default function ProductForm({ product, categories }: Props) {
       const urls: string[] = [];
       for (const file of Array.from(files)) {
         const blob = await compressImage(file);
-        const path = `${productId.current}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
+        const path = `${productId.current}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.webp`;
         const { error: upErr } = await sb.storage.from("product-images").upload(path, blob, {
-          contentType: "image/jpeg",
+          contentType: "image/webp",
           upsert: false,
         });
         if (upErr) throw upErr;
@@ -106,6 +107,7 @@ export default function ProductForm({ product, categories }: Props) {
         images,
         is_active: isActive,
         is_featured: isFeatured,
+        is_new_arrival: isNewArrival,
       };
       const { error: upErr } = await sb.from("products").upsert(row, { onConflict: "id" });
       if (upErr) throw upErr;
@@ -247,6 +249,13 @@ export default function ProductForm({ product, categories }: Props) {
             <span className={`block w-4 h-4 bg-white rounded-full shadow transition-transform ${isFeatured ? "translate-x-5" : ""}`} />
           </span>
           <span className="text-left">Featured on homepage<br /><span className="text-xs font-normal text-muted">{isFeatured ? "Shown in highlights" : "Not highlighted"}</span></span>
+        </button>
+        <button type="button" onClick={() => setIsNewArrival(!isNewArrival)}
+          className="flex items-center gap-3 text-sm font-semibold cursor-pointer group">
+          <span className={`w-11 h-6 rounded-full p-1 transition-colors ${isNewArrival ? "bg-[#1FA855]" : "bg-[#D8C9AC]"}`}>
+            <span className={`block w-4 h-4 bg-white rounded-full shadow transition-transform ${isNewArrival ? "translate-x-5" : ""}`} />
+          </span>
+          <span className="text-left">New Arrival<br /><span className="text-xs font-normal text-muted">{isNewArrival ? "Shows NEW badge + homepage section" : "Not marked as new"}</span></span>
         </button>
         </div>
       </div>

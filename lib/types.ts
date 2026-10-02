@@ -22,6 +22,7 @@ export type Product = {
   description: string | null;
   images: string[];
   is_featured: boolean;
+  is_new_arrival: boolean;
   is_active: boolean;
   sort_order: number;
   created_at: string;

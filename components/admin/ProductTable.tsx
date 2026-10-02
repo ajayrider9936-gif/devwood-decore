@@ -16,7 +16,7 @@ export default function ProductTable({ products: initial }: { products: Product[
   const [items, setItems] = useState<Product[]>(initial);
   const [busy, setBusy] = useState<string | null>(null);
 
-  const toggle = (p: Product, field: "is_active" | "is_featured") => {
+  const toggle = (p: Product, field: "is_active" | "is_featured" | "is_new_arrival") => {
     const next = !p[field];
     // 1. Update UI instantly
     setItems((list) => list.map((x) => (x.id === p.id ? { ...x, [field]: next } : x)));
@@ -89,6 +89,7 @@ export default function ProductTable({ products: initial }: { products: Product[
               <th className="px-5 py-3.5 font-extrabold">Price</th>
               <th className="px-5 py-3.5 font-extrabold">Status</th>
               <th className="px-5 py-3.5 font-extrabold">Featured</th>
+              <th className="px-5 py-3.5 font-extrabold">New</th>
               <th className="px-5 py-3.5 font-extrabold text-right">Actions</th>
             </tr>
           </thead>
@@ -136,6 +137,19 @@ export default function ProductTable({ products: initial }: { products: Product[
                     className={`transition-transform active:scale-90 hover:scale-110 cursor-pointer ${p.is_featured ? "text-gold" : "text-[#D8C9AC] hover:text-gold"}`}
                   >
                     <IconStar className="w-5 h-5" filled={p.is_featured} />
+                  </button>
+                </td>
+                <td className="px-5 py-3">
+                  <button
+                    onClick={() => toggle(p, "is_new_arrival")}
+                    title="Click to mark as New Arrival"
+                    className={`text-[11px] font-extrabold px-3 py-1.5 rounded-full transition-all active:scale-95 cursor-pointer ${
+                      p.is_new_arrival
+                        ? "bg-[#1FA855] text-white hover:bg-[#178A45]"
+                        : "bg-[#EDE6D4] text-muted hover:bg-[#E0D5BC]"
+                    }`}
+                  >
+                    {p.is_new_arrival ? "NEW" : "—"}
                   </button>
                 </td>
                 <td className="px-5 py-3 text-right whitespace-nowrap">

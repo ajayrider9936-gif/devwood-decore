@@ -6,16 +6,17 @@ import SectionHead from "@/components/public/SectionHead";
 import CategoryCard from "@/components/public/CategoryCard";
 import ProductCard from "@/components/public/ProductCard";
 import WhatsAppFloat from "@/components/public/WhatsAppFloat";
-import { getSettings, getCategories, getFeaturedProducts } from "@/lib/site";
+import { getSettings, getCategories, getFeaturedProducts, getNewArrivals } from "@/lib/site";
 import { isSupabaseConfigured } from "@/lib/supabase-config";
 import { waLink } from "@/lib/whatsapp";
 import { IconTree, IconHand, IconRuler } from "@/components/icons";
 
 export default async function HomePage() {
-  const [settings, categories, featured] = await Promise.all([
+  const [settings, categories, featured, newArrivals] = await Promise.all([
     getSettings(),
     getCategories(true),
     getFeaturedProducts(),
+    getNewArrivals(),
   ]);
 
   const siteName = settings.site_name || "Devwood Dekor";
@@ -124,6 +125,25 @@ export default async function HomePage() {
             <SectionHead title="Featured Pieces" subtitle="Handpicked by our artisans" />
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5">
               {featured.map((p, i) => (
+                <ProductCard key={p.id} product={p} whatsapp={whatsapp} index={i} />
+              ))}
+            </div>
+            <div className="text-center mt-10">
+              <Link href="/shop" className="inline-block border-2 border-walnut text-walnut font-bold px-8 py-3 rounded-full hover:bg-walnut hover:text-white transition-colors">
+                View All Products
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* NEW ARRIVALS */}
+      {newArrivals.length > 0 && (
+        <section className="bg-cream border-t border-line">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8 py-16">
+            <SectionHead title="New Arrivals" subtitle="Fresh from our workshop" />
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5">
+              {newArrivals.map((p, i) => (
                 <ProductCard key={p.id} product={p} whatsapp={whatsapp} index={i} />
               ))}
             </div>
